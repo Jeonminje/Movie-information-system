@@ -8,4 +8,4 @@
 <img width="20%" src="https://user-images.githubusercontent.com/84283712/214506340-d6f9d239-234c-4b21-965a-ab462aca46f0.png"/>
 
 ##### [회원가입]
-<img width="20%" src="https://user-images.githubusercontent.com/84283712/214506362-c837101c-d92b-4b1a-9a01-6aa006a64657.png"/>
+<img width="20%" src="https://user-images.githubusercontent.com/84283712/215337484-fa063d84-3467-42e0-ac6f-57ed658e37c0.png"/>
