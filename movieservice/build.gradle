@@ -19,14 +19,16 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.0'
+	//패스워드 암호화를 위해 jbcrypt 사용
+	implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+	//email 인증코드 서비스를 위해 추가
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.1'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 tasks.named('test') {
