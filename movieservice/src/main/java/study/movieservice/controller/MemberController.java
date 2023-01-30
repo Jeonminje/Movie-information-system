@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import study.movieservice.domain.member.Member;
+import study.movieservice.service.MailSender;
 import study.movieservice.service.MemberService;
 
 
@@ -19,21 +20,37 @@ import study.movieservice.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MailSender mailSender;
 
     @ResponseBody
     @PostMapping("/idcheck") // 아이디 중복 확인
-    public String loginIdCheck(@RequestBody Member member) {
-        if (memberService.checkLoginId(member.getLoginId())) {
+    public String memberIdCheck(@RequestBody Member member){
+        if(memberService.checkLoginId(member.getLoginId())){
             return "이미 사용중인 아이디 입니다.";
-        } else {
+        }else{
             return "사용가능한 아이디 입니다.";
         }
     }
 
+
     @ResponseBody
     @PostMapping("/join") // 회원가입
-    public String memberJoin(@RequestBody Member member) {
+    public String memberJoin(@RequestBody Member member){
         memberService.addMember(member);
         return "ok";
     }
+
+    @ResponseBody
+    @PostMapping("/emailcheck")
+    public Integer memberEmailCheck(@RequestBody Member member) {
+        Integer certificationNum = -1;
+        try {
+            certificationNum = mailSender.sendMail(member.getEmail());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return certificationNum;
+    }
+
 }
