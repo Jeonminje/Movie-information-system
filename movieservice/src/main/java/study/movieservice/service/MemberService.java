@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import study.movieservice.domain.SessionConst;
 import study.movieservice.domain.member.Grade;
 import study.movieservice.domain.member.Member;
 import study.movieservice.repository.MemberRepository;
@@ -35,6 +36,26 @@ public class MemberService {
 
         if(finding.isPresent()){ // 값이 있다면.
             return true;
+        }
+
+        return false;
+    }
+
+    public boolean checkMember(String loginId, String password, HttpServletRequest request){
+
+        Optional<Member> finding  = memberRepository.findByLoginId(loginId);
+
+        if(finding.isPresent()){ // 값이 있다면.
+            Member findMember = finding.get();
+            if(BCrypt.checkpw(password, findMember.getLoginPassword())){
+
+                //세션이 있으면 있는 세션을 반환, 없으면 신규 세션을 생성
+                HttpSession session = request.getSession();
+                //세션에 로그인 회원 정보 보관.
+                session.setAttribute(SessionConst.LOGIN_MEMBER, findMember.getMemberId());
+
+                return true;
+            }
         }
 
         return false;
