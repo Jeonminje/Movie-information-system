@@ -27,6 +27,12 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.1'
 	//mariadb 사용을 위해 추가
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
+	// recapcha
+	implementation 'net.tanesha.recaptcha4j:recaptcha4j:0.0.7'
+	//recapcha for using json
+	implementation 'javax.json:javax.json-api:1.1.2'
+	implementation 'org.glassfish:javax.json:1.1'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
