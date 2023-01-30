@@ -25,6 +25,8 @@ dependencies {
 	implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 	//email 인증코드 서비스를 위해 추가
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.7.1'
+	//mariadb 사용을 위해 추가
+	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
