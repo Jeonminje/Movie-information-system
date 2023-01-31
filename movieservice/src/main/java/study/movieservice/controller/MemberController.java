@@ -2,38 +2,35 @@ package study.movieservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import study.movieservice.domain.member.Member;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import study.movieservice.domain.member.LoginIdDTO;
+import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.service.MemberService;
 
 
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/member")
+@RequestMapping("/members")
 @Slf4j
 public class MemberController {
 
     private final MemberService memberService;
 
-    @ResponseBody
     @PostMapping("/idcheck") // 아이디 중복 확인
-    public String loginIdCheck(@RequestBody Member member) {
-        if (memberService.checkLoginId(member.getLoginId())) {
-            return "이미 사용중인 아이디 입니다.";
+    public ResponseEntity<String> loginIdCheck(@RequestBody LoginIdDTO loginId) {
+        if (memberService.checkLoginId(loginId.getLoginId())) {
+            return new ResponseEntity<>("이미 사용중인 아이디 입니다.", HttpStatus.CONFLICT);
         } else {
-            return "사용가능한 아이디 입니다.";
+            return new ResponseEntity<>("사용가능한 아이디 입니다.", HttpStatus.OK);
         }
     }
 
-    @ResponseBody
     @PostMapping("/join") // 회원가입
-    public String memberJoin(@RequestBody Member member) {
-        memberService.addMember(member);
+    public String memberJoin(@RequestBody MemberDTO memberDTO) {
+        memberService.addMember(memberDTO);
         return "ok";
     }
 }

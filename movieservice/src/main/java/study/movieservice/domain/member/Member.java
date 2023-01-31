@@ -1,22 +1,16 @@
 package study.movieservice.domain.member;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class Member {
     private Long memberId;
-    private String email;
-    private String loginId;
-    private String loginPassword;
-    private String nickname;
-    private Grade grade;
+    private final String email;
+    private final String loginId;
+    private final String loginPassword;
+    private final String nickname;
+    private final Grade grade;
 
-
-    public void setGrade(Grade grade) {
-        this.grade = grade;
-    }
-
-    public void setLoginPassword(String loginPassword) {
-        this.loginPassword = loginPassword;
-    }
 }

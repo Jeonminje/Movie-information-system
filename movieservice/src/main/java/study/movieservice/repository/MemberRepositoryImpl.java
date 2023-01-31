@@ -2,6 +2,7 @@ package study.movieservice.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import study.movieservice.domain.member.LoginIdDTO;
 import study.movieservice.domain.member.Member;
 import study.movieservice.repository.mapper.MemberMapper;
 
@@ -19,7 +20,7 @@ public class MemberRepositoryImpl implements MemberRepository{
     }
 
     @Override
-    public Optional<Member> findByLoginId(String loginId) {
+    public Optional<LoginIdDTO> findByLoginId(String loginId) {
         return memberMapper.findByLoginId(loginId);
     }
 }
