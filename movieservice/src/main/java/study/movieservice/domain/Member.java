@@ -1,14 +1,17 @@
 package study.movieservice.domain;
 
+
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import static study.movieservice.domain.Grade.BASIC;
 
 
 @Getter
-@NoArgsConstructor
+@Setter
 public class Member {
+
+
     private Long id;
     private String loginId;
     private String email;
@@ -16,15 +19,14 @@ public class Member {
     private String nickname;
     private Grade grade;
 
+    public Member(){
+    }
+
     public Member(String loginId, String loginPassword, String email, String nickname) {
         this.loginId = loginId;
         this.loginPassword = loginPassword;
         this.email = email;
         this.nickname = nickname;
         this.grade= BASIC;
-    }
-
-    public void setLoginPassword(String password){
-        this.loginPassword=password;
     }
 }
