@@ -3,8 +3,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="study.movieservice.repository.mybatis.MemberMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into member (login_id, login_password, email, nickname, grade)
-        values (#{loginId}, #{loginPassword}, #{email}, #{nickname}, #{grade})
+        insert into member (login_id, login_password, email, nickname)
+        values (#{loginId}, #{loginPassword}, #{email}, #{nickname})
     </insert>
 
     <select id="findByloginId" resultType="Member">
