@@ -12,7 +12,7 @@
             select login_id
             from members
             where login_id = #{loginId}
-                   )
+        )
     </select>
 </mapper>
 

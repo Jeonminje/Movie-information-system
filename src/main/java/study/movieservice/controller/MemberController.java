@@ -17,7 +17,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/id-check")
-    public ResponseEntity<String> loginIdCheck(@RequestParam("login_id") String loginId) throws LoginException {
+    public ResponseEntity<String> loginIdCheck(@RequestParam String loginId) throws LoginException {
 
         if (memberService.checkLoginId(loginId)) {
             throw new LoginException("이미 사용중인 아이디 입니다.");
@@ -29,10 +29,5 @@ public class MemberController {
     @PostMapping("/sign-up")
     public void memberJoin(@RequestBody MemberDTO memberDTO) {
         memberService.addMember(memberDTO);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<String> loginHandle(LoginException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
 }

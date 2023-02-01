@@ -7,3 +7,5 @@
 out
 gen
 application.properties
+build
+.gradle
