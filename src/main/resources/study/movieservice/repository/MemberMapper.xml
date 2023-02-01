@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="study.movieservice.repository.MemberMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="memberId">
+        insert into members(email, login_id, login_password, nickname, grade, updated_at, created_at)
+        values (#{email}, #{loginId}, #{loginPassword},#{nickname},#{grade}, current_timestamp , current_timestamp)
+    </insert>
+
+    <select id="findByLoginId" resultType="boolean">
+        select exists (
+            select login_id
+            from members
+            where login_id = #{loginId}
+                   )
+    </select>
+</mapper>
+
