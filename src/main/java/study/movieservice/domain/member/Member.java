@@ -2,7 +2,6 @@ package study.movieservice.domain.member;
 
 import lombok.Getter;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 
 @Builder
 @Getter
