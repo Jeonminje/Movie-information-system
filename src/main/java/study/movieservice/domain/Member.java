@@ -4,11 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static study.movieservice.domain.Grade.BASIC;
-
-
 @Getter
-
 @NoArgsConstructor
 public class Member {
     private Long id;
@@ -25,5 +21,4 @@ public class Member {
         this.email = email;
         this.nickname = nickname;
     }
-
 }

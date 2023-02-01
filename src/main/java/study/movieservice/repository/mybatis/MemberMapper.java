@@ -9,6 +9,5 @@ import java.util.Optional;
 public interface MemberMapper {
     void save(Member member);
 
-    Optional<Member> findByloginId(String loginId);
-
+    Optional<Member> findByLoginId(String loginId);
 }
