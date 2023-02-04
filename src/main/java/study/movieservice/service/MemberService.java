@@ -12,12 +12,12 @@ public class MemberService{
     private final MemberMapper memberMapper;
 
     public void save(Member member){
-        Member member1= Member.builder()
+        Member encryptMember= Member.builder()
                 .loginId(member.getLoginId())
                 .loginPassword(BCrypt.hashpw(member.getLoginPassword(),BCrypt.gensalt()))
                 .email(member.getEmail())
                 .nickname(member.getNickname())
                 .build();
-        memberMapper.save(member1);
+        memberMapper.save(encryptMember);
     }
 }
