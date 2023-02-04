@@ -2,6 +2,7 @@ package study.movieservice.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -13,5 +14,10 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(LoginException.class)
     public ResponseEntity<String> loginHandler(LoginException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MailAuthenticationException.class)
+    public ResponseEntity<String> mailExceptionHandler(MailAuthenticationException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_IMPLEMENTED);
     }
 }

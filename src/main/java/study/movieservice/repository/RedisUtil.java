@@ -1,14 +1,14 @@
-package study.movieservice.service;
+package study.movieservice.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.time.Duration;
 import java.util.Optional;
 
-@Service
+@Repository
 @RequiredArgsConstructor
 public class RedisUtil {
 
@@ -23,5 +23,9 @@ public class RedisUtil {
         ValueOperations<String, String> store = redisTemplate.opsForValue();
         Duration duration = Duration.ofSeconds(sec);
         store.set(email, emailCode, duration);
+    }
+
+    public void deleteData(String key) {
+        redisTemplate.delete(key);
     }
 }

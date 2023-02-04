@@ -32,6 +32,8 @@ dependencies {
 	//recapcha for using json
 	implementation 'javax.json:javax.json-api:1.1.2'
 	implementation 'org.glassfish:javax.json:1.1'
+	//using redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'

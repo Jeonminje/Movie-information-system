@@ -1,9 +1,10 @@
 package study.movieservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import study.movieservice.repository.RedisUtil;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -13,51 +14,68 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
-public class MailSender {
+public class MailService {
 
     private final JavaMailSender emailSender;
-    private Integer certificationNumber;
+    private final RedisUtil redisUtil;
 
-    public MimeMessage createMessage(String email) throws MessagingException, UnsupportedEncodingException {
+    public MimeMessage createMessage(String email, String emailCode) throws MessagingException, UnsupportedEncodingException {
 
         MimeMessage message = emailSender.createMimeMessage();
 
-        message.addRecipients(MimeMessage.RecipientType.TO, email);// 보내는 대상
-        message.setSubject("Movie Systems 회원가입 이메일 인증입니다.");// 제목
+        message.addRecipients(MimeMessage.RecipientType.TO, email);
+        message.setSubject(messageSubject());
 
-        String content =
-                "Movie Systems 회원가입 인증 메일입니다." +
-                        "<br><br>" +
-                        "인증 번호는 " + certificationNumber + "입니다." +
-                        "<br>" +
-                        "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
-        message.setText(content, "utf-8", "html");// 내용, charset 타입, subtype
+        String content = messageContent(emailCode);
+        message.setText(content, "utf-8", "html");
 
-        // 발신자의 이메일 주소, 발신자 이름
-        message.setFrom(new InternetAddress("practice450@naver.com", "MovieSystems"));// 보내는 사람
+
+        message.setFrom(new InternetAddress("practice450@naver.com","MovieSystems"));
 
         return message;
     }
 
-    public Integer createKey() {
-        Random random = new Random();
-        Integer randomNum = random.nextInt(888888) + 111111;
-
-        return randomNum;
+    private String messageSubject() {
+        return "Movie Systems 회원가입 이메일 인증입니다.";
     }
 
-    public Integer sendMail(String email) throws Exception {
-        certificationNumber = createKey();
+    private String messageContent(String emailCode) {
+        return "Movie Systems 회원가입 인증 메일입니다." +
+                "<br><br>" +
+                "인증 번호는 " + emailCode + "입니다." +
+                "<br>" +
+                "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
+    }
 
-        MimeMessage message = createMessage(email);
+    public String createKey() {
+        StringBuilder key = new StringBuilder("");
+        Random random = new Random();
 
-        try {
-            emailSender.send(message);
-        } catch (MailException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException();
+        for(int i=0;i<6;i++){
+            Integer randomNum = random.nextInt(9);
+            key.append(randomNum);
         }
 
-        return certificationNumber; // 메일로 보낸 인증 코드를 서버로 반환
+        return key.toString();
+    }
+
+    @Transactional
+    public void sendMail(String email) throws Exception {
+        String emailCode = createKey();
+        MimeMessage message = createMessage(email, emailCode);
+
+        redisUtil.setDataExpire(email, emailCode, 60*3L);
+        emailSender.send(message);
+    }
+
+    public boolean checkEmailCode(String email, String emailCode){
+        String code = redisUtil.getData(email).get();
+
+        if( code != null && code.equals(emailCode)){
+            redisUtil.deleteData(email);
+            return true;
+        }else{
+            return false;
+        }
     }
 }
