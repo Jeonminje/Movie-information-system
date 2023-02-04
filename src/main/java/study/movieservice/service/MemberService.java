@@ -20,4 +20,10 @@ public class MemberService{
                 .build();
         memberMapper.save(member1);
     }
+
+    public boolean findByLoginId(String loginId){
+        if(memberMapper.findByLoginId(loginId).isEmpty())
+            return true;
+        return false;
+    }
 }

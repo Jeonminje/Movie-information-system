@@ -18,4 +18,11 @@ public class MemberController {
         memberService.save(member);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/id-check")
+    public ResponseEntity<String> isId_Duplicated(@RequestParam String loginId){
+        if(memberService.findByLoginId(loginId))
+            return new ResponseEntity<>("중복된 아이디입니다. 다시 입력해주세요", HttpStatus.CONFLICT);
+        return new ResponseEntity<>("사용가능한 아이디입니다.",HttpStatus.OK);
+    }
 }
