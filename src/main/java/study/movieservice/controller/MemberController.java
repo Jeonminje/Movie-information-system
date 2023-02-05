@@ -3,7 +3,6 @@ package study.movieservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailSendException;
 import org.springframework.web.bind.annotation.*;
 import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.service.MailService;
@@ -37,11 +36,7 @@ public class MemberController {
     @ResponseBody
     @PostMapping("/email-check")
     public ResponseEntity<String> memberEmailCheck(@RequestParam String email) {
-        try {
-            mailService.sendMail(email);
-        } catch (Exception e) {
-            throw new MailSendException("이메일 전송에 실패하였습니다.");
-        }
+        mailService.sendMail(email);
         return ResponseEntity.ok("이메일 전송에 성공하였습니다.(코드 유효기간 : 3분)");
     }
 

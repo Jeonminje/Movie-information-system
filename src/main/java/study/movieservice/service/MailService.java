@@ -1,15 +1,16 @@
 package study.movieservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import study.movieservice.repository.RedisUtil;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.io.UnsupportedEncodingException;
+import java.time.Duration;
 import java.util.Random;
 
 @Service
@@ -17,34 +18,27 @@ import java.util.Random;
 public class MailService {
 
     private final JavaMailSender emailSender;
-    private final RedisUtil redisUtil;
+    public final StringRedisTemplate redisTemplate;
+    @Value("${spring.mail.username}")
+    private String address;
+    @Value("${sender}")
+    private String sender;
 
-    public MimeMessage createMessage(String email, String emailCode) throws MessagingException, UnsupportedEncodingException {
+    public MimeMessage createMessage(String email, String emailCode)  {
 
         MimeMessage message = emailSender.createMimeMessage();
 
-        message.addRecipients(MimeMessage.RecipientType.TO, email);
-        message.setSubject(messageSubject());
+        try{
+            message.addRecipients(MimeMessage.RecipientType.TO, email);
+            message.setSubject(MessageForm.messageSubject());
 
-        String content = messageContent(emailCode);
-        message.setText(content, "utf-8", "html");
-
-
-        message.setFrom(new InternetAddress("practice450@naver.com","MovieSystems"));
-
+            String content = MessageForm.messageContent(emailCode);
+            message.setText(content, "utf-8", "html");
+            message.setFrom(new InternetAddress(address, sender));
+        } catch (Exception e) {
+            throw new MailSendException("이메일 작성에 실패하였습니다.");
+        }
         return message;
-    }
-
-    private String messageSubject() {
-        return "Movie Systems 회원가입 이메일 인증입니다.";
-    }
-
-    private String messageContent(String emailCode) {
-        return "Movie Systems 회원가입 인증 메일입니다." +
-                "<br><br>" +
-                "인증 번호는 " + emailCode + "입니다." +
-                "<br>" +
-                "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
     }
 
     public String createKey() {
@@ -59,20 +53,26 @@ public class MailService {
         return key.toString();
     }
 
-    @Transactional
-    public void sendMail(String email) throws Exception {
+    public void sendMail(String email) {
         String emailCode = createKey();
         MimeMessage message = createMessage(email, emailCode);
+        try{
+            ValueOperations<String, String> store = redisTemplate.opsForValue();
+            Duration duration = Duration.ofSeconds(60*3L);
+            store.set(email, emailCode, duration);
 
-        redisUtil.setDataExpire(email, emailCode, 60*3L);
-        emailSender.send(message);
+            emailSender.send(message);
+        }catch (Exception e){
+            throw new MailSendException("이메일 전송에 실패하였습니다.");
+        }
     }
 
     public boolean checkEmailCode(String email, String emailCode){
-        String code = redisUtil.getData(email).get();
+        ValueOperations<String,String > store = redisTemplate.opsForValue();
+        String code = store.get(email);
 
         if( code != null && code.equals(emailCode)){
-            redisUtil.deleteData(email);
+            redisTemplate.delete(email);
             return true;
         }else{
             return false;
