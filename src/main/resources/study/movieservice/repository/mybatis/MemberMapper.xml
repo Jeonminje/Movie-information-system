@@ -3,14 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="study.movieservice.repository.mybatis.MemberMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into member (login_id, login_password, email, nickname)
-        values (#{loginId}, #{loginPassword}, #{email}, #{nickname})
+        insert into member (login_id, login_password, email, nickname, email_key)
+        values (#{loginId}, #{loginPassword}, #{email}, #{nickname}, #{emailKey})
     </insert>
 
-    <select id="findByloginId" resultType="Member">
-        select id
+    <select id="findByLoginId" resultType="Member">
+        select *
         from member
         where login_id = #{loginId}
     </select>
 
+    <update id="updateMailAuth" parameterType="Member">
+        update member set email_auth=1 where email=#{email} and email_key=#{emailKey}
+    </update>
 </mapper>
