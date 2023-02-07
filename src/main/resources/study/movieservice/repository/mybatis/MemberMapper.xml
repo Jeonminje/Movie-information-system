@@ -7,7 +7,7 @@
         values (#{loginId}, #{loginPassword}, #{email}, #{nickname})
     </insert>
 
-    <select id="findByloginId" resultType="Member">
+    <select id="findByLoginId" resultType="Member">
         select id
         from member
         where login_id = #{loginId}
