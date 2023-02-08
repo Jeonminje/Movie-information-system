@@ -14,9 +14,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<Void> join(@RequestBody Member member){
+    public void join(@RequestBody Member member){
         memberService.save(member);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/id-check")
