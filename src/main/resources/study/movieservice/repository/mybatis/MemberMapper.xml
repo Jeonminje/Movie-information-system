@@ -8,12 +8,16 @@
     </insert>
 
     <select id="findByLoginId" resultType="Member">
-        select *
+        select id, login_id, email, nickname, email_key
         from member
         where login_id = #{loginId}
     </select>
 
     <update id="updateMailAuth" parameterType="Member">
         update member set email_auth=1 where email=#{email} and email_key=#{emailKey}
+    </update>
+
+    <update id="updateMailKey" parameterType="Member">
+        update member set email_Key=#{newMailKey} where email=#{member.email} and email_key=#{member.emailKey}
     </update>
 </mapper>
