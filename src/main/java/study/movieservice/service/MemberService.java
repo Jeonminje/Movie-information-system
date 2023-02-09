@@ -10,6 +10,9 @@ import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.repository.MemberMapper;
 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +46,29 @@ public class MemberService {
         String emailCode = mailService.createKey();
         MimeMessage message = mailService.createSignUpMessage(email, emailCode);
         mailService.sendMail(message);
+    }
+
+    public boolean logIn(String loginId, String password, HttpServletRequest request){
+
+        Optional<Member> finding  = memberMapper.getMember(loginId);
+
+        if(finding.isPresent()){
+            Member findMember = finding.get();
+            if(BCrypt.checkpw(password, findMember.getLoginPassword())){
+
+                HttpSession session = request.getSession();
+                session.setAttribute(findMember.getLoginId(), findMember.getNickname());
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void logOut(String loginId, HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.removeAttribute(loginId);
+        }
     }
 }

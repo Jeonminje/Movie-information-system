@@ -14,5 +14,11 @@
             where login_id = #{loginId}
         )
     </select>
+
+    <select id="getMember" resultType="Member">
+        select id, email, login_id, login_password, nickname, grade
+        from members
+        where login_id = #{loginId}
+    </select>
 </mapper>
 
