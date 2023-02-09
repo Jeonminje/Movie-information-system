@@ -31,11 +31,6 @@ public class MemberService {
     }
 
     public Optional<Member> findByLoginId(String loginId) {
-        Member member=memberMapper.findByLoginId(loginId).get();
-        System.out.println("loginId = " + member.getLoginId());
-        System.out.println("member.getEmailKey() = " + member.getEmailKey());
-        System.out.println("member = " + member.getNickname());
-
         return memberMapper.findByLoginId(loginId);
     }
 }
