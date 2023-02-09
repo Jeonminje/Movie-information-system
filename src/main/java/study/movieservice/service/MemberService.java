@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import study.movieservice.domain.Member;
 import study.movieservice.mail.TempKey;
 import study.movieservice.repository.mybatis.MemberMapper;
-
 import java.util.Optional;
 
 @Service
@@ -32,5 +31,17 @@ public class MemberService {
 
     public Optional<Member> findByLoginId(String loginId) {
         return memberMapper.findByLoginId(loginId);
+    }
+
+    public boolean updateMailAuth(Member member, String email, String emailKey) {
+        if (member.getEmailKey().equals(emailKey) && member.getEmail().equals(email)) {
+            String newMailKey = new TempKey().getKey(8, false);
+
+            memberMapper.updateMailAuth(member);
+            memberMapper.updateMailKey(member, newMailKey);
+
+            return true;
+        }
+        return false;
     }
 }

@@ -24,8 +24,4 @@ public final class MailForm {
         String result = buffer.toString();
         return result;
     }
-
-    public static String senderName() {
-        return "movieService 운영자";
-    }
 }
