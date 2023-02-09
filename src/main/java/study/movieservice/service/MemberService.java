@@ -9,11 +9,14 @@ import study.movieservice.domain.member.Member;
 import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.repository.MemberMapper;
 
+import javax.mail.internet.MimeMessage;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberMapper memberMapper;
+    private final MailService mailService;
 
     public void addMember(MemberDTO memberDTO){
         String encodingPassword = BCrypt.hashpw(memberDTO.getLoginPassword(), BCrypt.gensalt());
@@ -34,5 +37,11 @@ public class MemberService {
         }
 
         return false;
+    }
+
+    public void sendSignUpMessage(String email){
+        String emailCode = mailService.createKey();
+        MimeMessage message = mailService.createSignUpMessage(email, emailCode);
+        mailService.sendMail(message);
     }
 }

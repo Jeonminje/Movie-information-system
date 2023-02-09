@@ -36,7 +36,7 @@ public class MemberController {
     @ResponseBody
     @PostMapping("/email-check")
     public ResponseEntity<String> memberEmailCheck(@RequestParam String email) {
-        mailService.sendMail(email);
+        memberService.sendSignUpMessage(email);
         return ResponseEntity.ok("이메일 전송에 성공하였습니다.(코드 유효기간 : 3분)");
     }
 
