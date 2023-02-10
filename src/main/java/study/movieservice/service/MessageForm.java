@@ -4,6 +4,7 @@ public final class MessageForm {
 
     private MessageForm(){
     }
+
     public static String signUpMessageSubject() {
         return "Movie Systems 회원가입 이메일 인증입니다.";
     }
