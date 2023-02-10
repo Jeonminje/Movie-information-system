@@ -21,7 +21,6 @@ public class MailService {
     private final String address;
     private final String sender;
 
-    @Autowired
     public MailService(JavaMailSender emailSender, StringRedisTemplate redisTemplate,
                        @Value("${spring.mail.username}") String address,
                        @Value("${sender}") String sender) {
