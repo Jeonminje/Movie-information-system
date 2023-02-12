@@ -28,9 +28,6 @@ public class LoginService {
         String compareId = compareMember.getLoginId();
         String comparePw = compareMember.getLoginPassword();
 
-        // 멤버 존재 여부
-        // 인증 여부
-        // 로그인 여부
         Optional<Member> receiver = memberService.findByLoginId(compareId);
 
         if (receiver.isEmpty())
