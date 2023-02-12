@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import study.movieservice.domain.Member;
-import study.movieservice.domain.SessionKey;
 import study.movieservice.mail.TempKey;
 import study.movieservice.repository.mybatis.MemberMapper;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Service
@@ -15,7 +13,6 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberMapper memberMapper;
-    private final HttpSession httpSession;
 
     public void save(Member member) {
 
@@ -47,27 +44,15 @@ public class MemberService {
         }
         return false;
     }
-
-    public int checkEmailAuth(String loginId){
+    public boolean checkEmailAuth(String loginId){
         return memberMapper.checkEmailAuth(loginId);
     }
 
-    public boolean loginAccess(Member compareMember){//아이디랑 비밀번호만 온 상태
-        String compareId=compareMember.getLoginId();
-        String comparePw=compareMember.getLoginPassword();
-        String realPassword=memberMapper.findPasswordByLoginId(compareId);
-
-        if(BCrypt.checkpw(comparePw,realPassword)) {
-            Member userInfo=memberMapper.loadUserInfo(compareId);
-
-            httpSession.setAttribute(SessionKey.SESSION_LOGIN_ID,userInfo.getLoginId());
-
-            return true;
-        }
-        return false;
+    public String findPasswordByLoginId(String loginId){
+        return memberMapper.findPasswordByLoginId(loginId);
     }
 
-    public void logout(){
-        httpSession.invalidate();
+    public Member loadUserInfo(String loginId){
+        return memberMapper.loadUserInfo(loginId);
     }
 }

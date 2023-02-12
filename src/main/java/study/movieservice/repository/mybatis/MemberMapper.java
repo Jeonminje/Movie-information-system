@@ -15,7 +15,7 @@ public interface MemberMapper {
 
     void updateMailKey(@Param("member") Member member, @Param("newMailKey") String newMailKey);
 
-    int checkEmailAuth(String loginId);
+    boolean checkEmailAuth(String loginId);
 
     Member loadUserInfo(String loginId);
 

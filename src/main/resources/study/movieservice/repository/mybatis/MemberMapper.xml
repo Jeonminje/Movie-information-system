@@ -27,8 +27,8 @@
         where login_id = #{loginId}
     </select>
 
-    <select id="checkEmailAuth" resultType="int">
-        select count(*)
+    <select id="checkEmailAuth" resultType="boolean">
+        select if(count(*)=1,1,0)
         from member
         where login_id = #{loginId} and email_auth=1
     </select>
