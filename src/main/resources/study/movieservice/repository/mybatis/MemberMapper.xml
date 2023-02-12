@@ -20,4 +20,22 @@
     <update id="updateMailKey" parameterType="Member">
         update member set email_Key=#{newMailKey} where email=#{member.email} and email_key=#{member.emailKey}
     </update>
+
+    <select id="loadUserInfo" resultType="Member">
+        select id, login_id, email, nickname, grade
+        from member
+        where login_id = #{loginId}
+    </select>
+
+    <select id="checkEmailAuth" resultType="int">
+        select count(*)
+        from member
+        where login_id = #{loginId} and email_auth=1
+    </select>
+
+    <select id="findPasswordByLoginId" resultType="String">
+        select login_password
+        from member
+        where login_id = #{loginId}
+    </select>
 </mapper>

@@ -13,5 +13,11 @@ public interface MemberMapper {
 
     void updateMailAuth(Member member);
 
-    void updateMailKey(@Param("member") Member member, @Param("newMailKey")String newMailKey);
+    void updateMailKey(@Param("member") Member member, @Param("newMailKey") String newMailKey);
+
+    int checkEmailAuth(String loginId);
+
+    Member loadUserInfo(String loginId);
+
+    String findPasswordByLoginId(String loginId);
 }
