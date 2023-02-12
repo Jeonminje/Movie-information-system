@@ -15,7 +15,7 @@
         )
     </select>
 
-    <select id="getMember" resultType="Member">
+    <select id="getMemberForLogIn" resultType="Member">
         select id, email, login_id, login_password, nickname, grade
         from member
         where login_id = #{loginId}

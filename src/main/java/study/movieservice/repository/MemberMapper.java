@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface MemberMapper {
     void save(Member member);
     boolean findByLoginId(String loginId);
-    Optional<Member> getMember(String loginId);
+    Optional<Member> getMemberForLogIn(String loginId);
 }

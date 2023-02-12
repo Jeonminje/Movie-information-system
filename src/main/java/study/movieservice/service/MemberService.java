@@ -4,15 +4,13 @@ package study.movieservice.service;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import study.movieservice.domain.SessionConst;
 import study.movieservice.domain.member.Grade;
 import study.movieservice.domain.member.Member;
 import study.movieservice.domain.member.MemberDTO;
+import study.movieservice.exception.LoginIncorrectException;
 import study.movieservice.repository.MemberMapper;
 
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Service
@@ -21,6 +19,7 @@ public class MemberService {
 
     private final MemberMapper memberMapper;
     private final MailService mailService;
+    private final SessionManager sessionManager;
 
     public void addMember(MemberDTO memberDTO){
         String encodingPassword = BCrypt.hashpw(memberDTO.getLoginPassword(), BCrypt.gensalt());
@@ -49,26 +48,22 @@ public class MemberService {
         mailService.sendMail(message);
     }
 
-    public boolean logIn(String loginId, String password, HttpSession session){
+    public void logIn(String loginId, String password){
 
-        Optional<Member> finding  = memberMapper.getMember(loginId);
+        Optional<Member> finding  = memberMapper.getMemberForLogIn(loginId);
 
         if(finding.isPresent()){
             Member findMember = finding.get();
             if(BCrypt.checkpw(password, findMember.getLoginPassword())){
 
-                session.setAttribute(SessionConst.LOGIN_ID, findMember.getLoginId());
-                session.setAttribute(SessionConst.NICKNAME, findMember.getNickname());
-
-                return true;
+                sessionManager.storeLoginIdAndNickname(findMember.getLoginId(), findMember.getNickname());
+                return;
             }
         }
-        return false;
+        throw new LoginIncorrectException();
     }
 
-    public void logOut(HttpSession session){
-        if(session != null){
-            session.invalidate();
-        }
+    public void logOut(){
+        sessionManager.deleteAll();
     }
 }

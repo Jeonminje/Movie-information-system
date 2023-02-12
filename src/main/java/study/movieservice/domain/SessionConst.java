@@ -3,7 +3,7 @@ package study.movieservice.domain;
 public class SessionConst {
 
     public static final String LOGIN_ID = "loginId";
-    public static final String NICKNAME = "Nickname";
+    public static final String NICKNAME = "nickname";
 
     private SessionConst(){}
 }
