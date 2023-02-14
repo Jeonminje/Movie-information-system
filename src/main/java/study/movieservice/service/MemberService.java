@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 import study.movieservice.domain.member.Grade;
 import study.movieservice.domain.member.Member;
 import study.movieservice.domain.member.MemberDTO;
-import study.movieservice.exception.LoginIncorrectException;
 import study.movieservice.repository.MemberMapper;
 
 import javax.mail.internet.MimeMessage;
+import javax.security.auth.login.LoginException;
 import java.util.Optional;
+
+import static study.movieservice.domain.ExceptionMessageConst.FAILED_CHECK_ID;
+import static study.movieservice.domain.ExceptionMessageConst.FAILED_LOGIN;
 
 @Service
 @RequiredArgsConstructor
@@ -32,14 +35,12 @@ public class MemberService {
         memberMapper.save(member);
     }
 
-    public boolean checkLoginId(String loginId){
+    public void checkLoginId(String loginId) {
         boolean findFlag  = memberMapper.findByLoginId(loginId);
 
         if(findFlag){
-            return true;
+            throw new IllegalArgumentException(FAILED_CHECK_ID.getMessage());
         }
-
-        return false;
     }
 
     public void sendSignUpMessage(String email){
@@ -48,7 +49,7 @@ public class MemberService {
         mailService.sendMail(message);
     }
 
-    public void logIn(String loginId, String password){
+    public void logIn(String loginId, String password) throws LoginException {
 
         Optional<Member> finding  = memberMapper.getMemberForLogIn(loginId);
 
@@ -56,11 +57,11 @@ public class MemberService {
             Member findMember = finding.get();
             if(BCrypt.checkpw(password, findMember.getLoginPassword())){
 
-                sessionManager.storeLoginIdAndNickname(findMember.getLoginId(), findMember.getNickname());
+                sessionManager.storeLoginIdAndNickname(findMember.getMemberId(), findMember.getNickname());
                 return;
             }
         }
-        throw new LoginIncorrectException();
+        throw new LoginException(FAILED_LOGIN.getMessage());
     }
 
     public void logOut(){
