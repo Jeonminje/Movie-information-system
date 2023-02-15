@@ -12,9 +12,8 @@ public class SessionManager {
 
     private final HttpSession session;
 
-    public void storeLoginIdAndNickname(Long memberId, String nickname){
+    public void storeLoginIdAndNickname(Long memberId){
         session.setAttribute(SessionConst.MEMBER_ID, memberId);
-        session.setAttribute(SessionConst.NICKNAME, nickname);
     }
 
     public void deleteAll(){
