@@ -10,6 +10,11 @@ import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.repository.MemberMapper;
 
 import javax.mail.internet.MimeMessage;
+import javax.security.auth.login.LoginException;
+import java.util.Optional;
+
+import static study.movieservice.domain.ExceptionMessageConst.FAILED_CHECK_ID;
+import static study.movieservice.domain.ExceptionMessageConst.FAILED_LOGIN;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +22,7 @@ public class MemberService {
 
     private final MemberMapper memberMapper;
     private final MailService mailService;
+    private final SessionManager sessionManager;
 
     public void addMember(MemberDTO memberDTO){
         String encodingPassword = BCrypt.hashpw(memberDTO.getLoginPassword(), BCrypt.gensalt());
@@ -29,19 +35,36 @@ public class MemberService {
         memberMapper.save(member);
     }
 
-    public boolean checkLoginId(String loginId){
+    public void checkLoginId(String loginId) {
         boolean findFlag  = memberMapper.findByLoginId(loginId);
 
         if(findFlag){
-            return true;
+            throw new IllegalArgumentException(FAILED_CHECK_ID.getMessage());
         }
-
-        return false;
     }
 
     public void sendSignUpMessage(String email){
         String emailCode = mailService.createKey();
         MimeMessage message = mailService.createSignUpMessage(email, emailCode);
         mailService.sendMail(message);
+    }
+
+    public void logIn(String loginId, String password) throws LoginException {
+
+        Optional<Member> finding  = memberMapper.getMemberForLogIn(loginId);
+
+        if(finding.isPresent()){
+            Member findMember = finding.get();
+            if(BCrypt.checkpw(password, findMember.getLoginPassword())){
+
+                sessionManager.storeLoginIdAndNickname(findMember.getMemberId());
+                return;
+            }
+        }
+        throw new LoginException(FAILED_LOGIN.getMessage());
+    }
+
+    public void logOut(){
+        sessionManager.deleteAll();
     }
 }
