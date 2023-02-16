@@ -3,10 +3,7 @@ package study.movieservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import study.movieservice.domain.member.LoginParam;
 import study.movieservice.service.MemberService;
 
@@ -33,5 +30,11 @@ public class LoginController {
     public String logout(){
         memberService.logOut();
         return SUCCESS_LOGOUT.getMessage();
+    }
+
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public String mainPage(){
+        return "로그인 또는 회원가입이 필요합니다.";
     }
 }
