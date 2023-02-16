@@ -11,7 +11,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        String[] excludeUrl = {"/", "/members/*", "/log-in", "/log-out"};
+        String[] excludeUrl = {"/", "/members/*", "/log-in"};
 
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
