@@ -20,7 +20,9 @@ public enum ExceptionMessageConst {
     FAILED_LOGIN("아이디 또는 비밀번호가 일치하지 않습니다."),
     SUCCESS_LOGOUT("로그아웃 되었습니다."),
 
-    SUCCESS_SIGN_UP("회원가입이 완료되었습니다.");
+    SUCCESS_SIGN_UP("회원가입이 완료되었습니다."),
+
+    SUCCESS_SAVE_MOVIE("영화등록이 완료되었습니다.");
 
     private final String message;
 }
