@@ -4,15 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import study.movieservice.domain.Member;
-import study.movieservice.domain.ResultEnum;
 import study.movieservice.domain.SessionKey;
-import study.movieservice.exception.custom.NotCompleteAuthException;
-import study.movieservice.exception.custom.NotFoundMemberException;
-import study.movieservice.mail.TempKey;
-import study.movieservice.repository.mybatis.MemberMapper;
+import study.movieservice.exception.custom.NotCompleteException;
+import study.movieservice.exception.custom.NotFoundException;
 
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 import static study.movieservice.domain.ResultEnum.*;
@@ -31,15 +27,15 @@ public class LoginService {
         Optional<Member> receiver = memberService.findByLoginId(compareId);
 
         if (receiver.isEmpty())
-            throw new NotFoundMemberException(CANNOT_FOUND_ID);
+            throw new NotFoundException(CANNOT_FOUND_ID);
 
         if (!memberService.checkEmailAuth(compareId))
-            throw new NotCompleteAuthException(NOT_COMPLETED_AUTH);
+            throw new NotCompleteException(NOT_COMPLETED_AUTH);
 
         String realPassword = memberService.findPasswordByLoginId(compareId);
 
         if (BCrypt.checkpw(comparePw, realPassword)) {
-            Member userInfo = memberService.loadUserInfo(compareId);
+            Member userInfo = memberService.getUserInfo(compareId);
 
             session.setAttribute(SessionKey.SESSION_LOGIN_ID, userInfo.getLoginId());
 

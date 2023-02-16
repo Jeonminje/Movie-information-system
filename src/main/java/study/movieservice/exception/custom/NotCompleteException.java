@@ -4,11 +4,11 @@ import lombok.Getter;
 import study.movieservice.domain.ResultEnum;
 
 @Getter
-public class NotCompleteAuthException extends RuntimeException{
+public class NotCompleteException extends RuntimeException{
 
     ResultEnum resultEnum;
 
-    public NotCompleteAuthException(ResultEnum resultEnum){
+    public NotCompleteException(ResultEnum resultEnum){
         this.resultEnum=resultEnum;
     }
 }

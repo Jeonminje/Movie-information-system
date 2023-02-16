@@ -27,10 +27,10 @@
         where login_id = #{loginId}
     </select>
 
-    <select id="checkEmailAuth" resultType="boolean">
-        select if(count(*)=1,1,0)
+    <select id="checkEmailAuth" resultType="int">
+        select email_auth
         from member
-        where login_id = #{loginId} and email_auth=1
+        where login_id =#{loginId}
     </select>
 
     <select id="findPasswordByLoginId" resultType="String">

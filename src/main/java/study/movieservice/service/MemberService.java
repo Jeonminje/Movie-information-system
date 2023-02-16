@@ -45,14 +45,17 @@ public class MemberService {
         return false;
     }
     public boolean checkEmailAuth(String loginId){
-        return memberMapper.checkEmailAuth(loginId);
+        int compareEmailAuth = memberMapper.checkEmailAuth(loginId);
+        if(compareEmailAuth==0)
+            return false;
+        return true;
     }
 
     public String findPasswordByLoginId(String loginId){
         return memberMapper.findPasswordByLoginId(loginId);
     }
 
-    public Member loadUserInfo(String loginId){
-        return memberMapper.loadUserInfo(loginId);
+    public Member getUserInfo(String loginId){
+        return memberMapper.getUserInfo(loginId);
     }
 }
