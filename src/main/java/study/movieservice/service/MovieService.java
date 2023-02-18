@@ -22,33 +22,31 @@ public class MovieService {
         this.fixedPath = fixedPath;
     }
 
-    public void addMovie(Movie inputMovie){
-        Movie movie = Movie.builder()
-                .movieName(inputMovie.getMovieName())
-                .genre(inputMovie.getGenre())
-                .actor(inputMovie.getActor())
-                .runningTime(inputMovie.getRunningTime())
-                .supervisor(inputMovie.getSupervisor())
-                .openingDate(inputMovie.getOpeningDate()).build();
-
+    public void addMovie(Movie movie){
         movieMapper.save(movie);
     }
 
     public void addPoster(MultipartFile file,Long movieId){
 
-        String originalFileName=file.getOriginalFilename();
-        String FilePath=fixedPath+originalFileName;
-        File destination=new File(FilePath);
+        String FilePath=saveFile(file);
 
         Poster poster = Poster.builder()
                 .movieId(movieId)
                 .saveFilePath(FilePath).build();
+        movieMapper.savePoster(poster);
+    }
+
+    public String saveFile(MultipartFile file){
+
+        String originalFileName=file.getOriginalFilename();
+        String FilePath=fixedPath+originalFileName;
+        File destination=new File(FilePath);
 
         try {
             file.transferTo(destination);
-            movieMapper.savePoster(poster);
         } catch (IOException e) {
             throw new IllegalArgumentException(FAILED_FILE_RECEIVE.getMessage());
         }
+        return FilePath;
     }
 }

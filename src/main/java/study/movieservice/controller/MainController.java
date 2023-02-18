@@ -17,13 +17,13 @@ public class MainController {
     private final MovieService movieService;
 
     @PostMapping("/save-movies")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public String movieJoin(@RequestBody Movie movie) {
         movieService.addMovie(movie);
         return SUCCESS_SAVE_MOVIE.getMessage();
     }
     @PostMapping("/save-poster")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public String posterJoin(@RequestPart MultipartFile file,@RequestPart Long movieId){
         movieService.addPoster(file,movieId);
         return SUCCESS_SAVE_POSTER.getMessage();
