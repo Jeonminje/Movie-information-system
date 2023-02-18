@@ -2,7 +2,6 @@ package study.movieservice.controller.aop;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -18,10 +17,7 @@ import static java.util.Objects.isNull;
 @Aspect
 public class LoginCheckAop {
 
-    @Pointcut("execution(* study.movieservice.service.*.*(..))")
-    private void loginPointcut(){}
-
-    @Before("loginPointcut()")
+    @Before("@annotation(study.movieservice.controller.aop.annotation.LoginCheck)")
     public void loginCheck() throws LoginException {
         HttpSession httpSession = ((ServletRequestAttributes)(RequestContextHolder.currentRequestAttributes())).getRequest().getSession(false);
 
