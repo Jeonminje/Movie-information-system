@@ -21,7 +21,9 @@ public enum ExceptionMessageConst {
     SUCCESS_LOGOUT("로그아웃 되었습니다."),
     NEED_LOGIN("로그인이 필요한 서비스입니다."),
 
-    SUCCESS_SIGN_UP("회원가입이 완료되었습니다.");
+    SUCCESS_SIGN_UP("회원가입이 완료되었습니다."),
+
+    SUCCESS_SAVE_REVIEW("리뷰 등록이 완료되었습니다.");
 
     private final String message;
 }

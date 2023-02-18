@@ -18,7 +18,7 @@ import static java.util.Objects.isNull;
 @Aspect
 public class LoginCheckAop {
 
-    @Pointcut("execution(* study.movieservice.service.*.*(..))")
+    @Pointcut("execution(* study.movieservice.service.MovieService.*(..))")
     private void loginPointcut(){}
 
     @Before("loginPointcut()")

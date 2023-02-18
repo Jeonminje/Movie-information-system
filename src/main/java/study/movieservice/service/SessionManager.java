@@ -12,7 +12,7 @@ public class SessionManager {
 
     private final HttpSession session;
 
-    public void storeLoginIdAndNickname(Long memberId){
+    public void storeLoginId(Long memberId){
         session.setAttribute(SessionConst.MEMBER_ID, memberId);
     }
 

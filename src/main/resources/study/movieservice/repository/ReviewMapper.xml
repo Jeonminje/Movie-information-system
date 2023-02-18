@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="study.movieservice.repository.ReviewMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="reviewId">
+        insert into review(movie_id, member_id, content, rating, updated_at, created_at)
+        values (#{movieId}, #{memberId}, #{content},#{rating}, current_timestamp , current_timestamp)
+    </insert>
+
+    <select id="getTotalRowCount" resultType="int">
+        select count (*)
+        from review
+    </select>
+
+    <select id="getReviewList" resultType="ReviewVO">
+        select r.id as reviewId, movie_id, login_id, r.member_id as member_id, nickname, content, rating
+        from review as r left join member as m
+        on r.member_id = m.id
+        limit #{startIdx}, 10
+    </select>
+</mapper>
+
