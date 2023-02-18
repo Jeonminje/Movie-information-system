@@ -29,6 +29,8 @@ dependencies {
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
 	//using redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//using aop
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'

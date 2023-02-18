@@ -31,10 +31,4 @@ public class LoginController {
         memberService.logOut();
         return SUCCESS_LOGOUT.getMessage();
     }
-
-    @GetMapping("/")
-    @ResponseStatus(HttpStatus.OK)
-    public String mainPage(){
-        return "로그인 또는 회원가입이 필요합니다.";
-    }
 }

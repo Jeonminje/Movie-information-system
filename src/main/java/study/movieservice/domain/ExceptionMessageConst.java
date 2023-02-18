@@ -19,6 +19,7 @@ public enum ExceptionMessageConst {
     SUCCESS_LOGIN("로그인이 완료되었습니다."),
     FAILED_LOGIN("아이디 또는 비밀번호가 일치하지 않습니다."),
     SUCCESS_LOGOUT("로그아웃 되었습니다."),
+    NEED_LOGIN("로그인이 필요한 서비스입니다."),
 
     SUCCESS_SIGN_UP("회원가입이 완료되었습니다.");
 
