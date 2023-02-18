@@ -15,7 +15,7 @@ public class MainController {
     private final MovieService movieService;
 
     @PostMapping("/save-movies")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     public String memberJoin(@RequestBody Movie movie) {
         movieService.addMovie(movie);
         return SUCCESS_SAVE_MOVIE.getMessage();
