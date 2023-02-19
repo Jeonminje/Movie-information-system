@@ -24,15 +24,18 @@ public class MovieService {
     }
 
     public void addPoster(MultipartFile file, Long movieId) {
-        try {
-            String FilePath = fileIO.uploadFile(file);
-            Poster poster = Poster.builder()
-                    .movieId(movieId)
-                    .saveFilePath(FilePath).build();
+        String filePath;
 
-            posterMapper.savePoster(poster);
+        try {
+            filePath = fileIO.uploadFile(file);
         } catch (IOException e) {
             throw new IllegalArgumentException(FAILED_FILE_RECEIVE.getMessage());
         }
+
+        Poster poster = Poster.builder()
+                .movieId(movieId)
+                .saveFilePath(filePath).build();
+
+        posterMapper.savePoster(poster);
     }
 }
