@@ -1,25 +1,25 @@
 package study.movieservice.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import study.movieservice.domain.movie.Movie;
 import study.movieservice.domain.movie.Poster;
 import study.movieservice.repository.MovieMapper;
-import java.io.File;
-import java.io.IOException;
-
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_FILE_RECEIVE;
+import study.movieservice.repository.PosterMapper;
+import study.movieservice.service.fileIO.FileIO;
+import study.movieservice.service.fileIO.FileIOLocal;
 
 @Service
 public class MovieService {
 
     private final MovieMapper movieMapper;
-    private final String fixedPath;
+    private final PosterMapper posterMapper;
+    private final FileIO fileIO;
 
-    public MovieService(MovieMapper movieMapper,@Value("${fixedPath}") String fixedPath) {
+    public MovieService(MovieMapper movieMapper, PosterMapper posterMapper, FileIOLocal fileIOLocal) {
         this.movieMapper = movieMapper;
-        this.fixedPath = fixedPath;
+        this.posterMapper=posterMapper;
+        this.fileIO=fileIOLocal;
     }
 
     public void addMovie(Movie movie){
@@ -28,25 +28,11 @@ public class MovieService {
 
     public void addPoster(MultipartFile file,Long movieId){
 
-        String FilePath=saveFile(file);
+        String FilePath= fileIO.saveFile(file);
 
         Poster poster = Poster.builder()
                 .movieId(movieId)
                 .saveFilePath(FilePath).build();
-        movieMapper.savePoster(poster);
-    }
-
-    public String saveFile(MultipartFile file){
-
-        String originalFileName=file.getOriginalFilename();
-        String FilePath=fixedPath+originalFileName;
-        File destination=new File(FilePath);
-
-        try {
-            file.transferTo(destination);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(FAILED_FILE_RECEIVE.getMessage());
-        }
-        return FilePath;
+        posterMapper.savePoster(poster);
     }
 }
