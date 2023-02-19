@@ -2,6 +2,8 @@ package study.movieservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import study.movieservice.domain.movie.Movie;
+import study.movieservice.repository.MovieMapper;
 import study.movieservice.domain.SessionConst;
 import study.movieservice.domain.movie.Review;
 import study.movieservice.domain.movie.ReviewVO;
@@ -21,6 +23,7 @@ public class MovieService {
 
     private final ReviewMapper reviewMapper;
     private final HttpSession httpSession;
+    private final MovieMapper movieMapper;
 
     public void saveReview(Review reviewDto) {
         Long memberId = (Long) httpSession.getAttribute(SessionConst.MEMBER_ID);
@@ -55,9 +58,13 @@ public class MovieService {
         return result;
     }
 
-    private Map<String, Object> makeMap(String s, Object o){
+    private Map<String, Object> makeMap(String s, Object o) {
         Map<String, Object> map = new HashMap<>();
         map.put(s, o);
         return map;
+    }
+
+    public void addMovie(Movie movie){
+        movieMapper.save(movie);
     }
 }
