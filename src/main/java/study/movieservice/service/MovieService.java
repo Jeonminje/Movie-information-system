@@ -1,13 +1,19 @@
 package study.movieservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import study.movieservice.domain.SessionConst;
 import study.movieservice.domain.movie.Review;
+import study.movieservice.domain.movie.ReviewVO;
 import study.movieservice.repository.ReviewMapper;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_REVIEW;
 
 @Service
 @RequiredArgsConstructor
@@ -27,19 +33,31 @@ public class MovieService {
         reviewMapper.save(review);
     }
 
-    public JSONObject getReviewList(Integer currentPageNum){
+    public List<Map<String, Object>> getReviewList(Integer currentPageNum){
 
-        int total = reviewMapper.getTotalRowCount();
-        int reviewPerPage = 10;
-        int totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
-        int startIdx = (currentPageNum - 1) * reviewPerPage;
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("total", total);
-        jsonObject.put("totalPageNum", totalPageNum);
-        jsonObject.put("currentPage", currentPageNum);
-        jsonObject.put("data", reviewMapper.getReviewList(startIdx));
+        try{
+            int total = reviewMapper.getTotalRowCount();
+            int reviewPerPage = 10;
+            int totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
+            int startIdx = (currentPageNum - 1) * reviewPerPage;
+            List<ReviewVO> data = reviewMapper.getReviewList(startIdx);
 
-        return jsonObject;
+            result.add(makeMap("total", total));
+            result.add(makeMap("totalPageNum", totalPageNum));
+            result.add(makeMap("currentPage", currentPageNum));
+            result.add(makeMap("data", data));
+        } catch (Exception e){
+            throw  new IllegalArgumentException(FAILED_BRING_REVIEW.getMessage());
+        }
+
+        return result;
+    }
+
+    private Map<String, Object> makeMap(String s, Object o){
+        Map<String, Object> map = new HashMap<>();
+        map.put(s, o);
+        return map;
     }
 }
