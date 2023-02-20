@@ -1,29 +1,35 @@
 package study.movieservice.service;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import study.movieservice.domain.movie.Movie;
-import study.movieservice.repository.MovieMapper;
+import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.SessionConst;
+import study.movieservice.domain.movie.Movie;
 import study.movieservice.domain.movie.Review;
 import study.movieservice.domain.movie.ReviewVO;
+import study.movieservice.repository.MovieMapper;
 import study.movieservice.repository.ReviewMapper;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_REVIEW;
 
 @Service
-@RequiredArgsConstructor
 public class MovieService {
 
     private final ReviewMapper reviewMapper;
     private final HttpSession httpSession;
     private final MovieMapper movieMapper;
+    private final Integer reviewPerPage;
+
+    public MovieService(ReviewMapper reviewMapper, HttpSession httpSession, MovieMapper movieMapper,
+                        @Value("${reviewPerPage}") Integer reviewPerPage) {
+        this.reviewMapper = reviewMapper;
+        this.httpSession = httpSession;
+        this.movieMapper = movieMapper;
+        this.reviewPerPage = reviewPerPage;
+    }
 
     public void saveReview(Review reviewDto) {
         Long memberId = (Long) httpSession.getAttribute(SessionConst.MEMBER_ID);
@@ -36,32 +42,29 @@ public class MovieService {
         reviewMapper.save(review);
     }
 
-    public List<Map<String, Object>> getReviewList(Integer currentPageNum){
+    public PagingVO getReviewList(Integer currentPageNum){
 
-        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        int total;
+        int totalPageNum;
+        int startIdx = (currentPageNum - 1) * reviewPerPage;
+        List<ReviewVO> data;
 
         try{
-            int total = reviewMapper.getTotalRowCount();
-            int reviewPerPage = 10;
-            int totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
-            int startIdx = (currentPageNum - 1) * reviewPerPage;
-            List<ReviewVO> data = reviewMapper.getReviewList(startIdx);
-
-            result.add(makeMap("total", total));
-            result.add(makeMap("totalPageNum", totalPageNum));
-            result.add(makeMap("currentPage", currentPageNum));
-            result.add(makeMap("data", data));
+            total = reviewMapper.getTotalRowCount();
+            data = reviewMapper.getReviewList(startIdx);
+            totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
         } catch (Exception e){
             throw  new IllegalArgumentException(FAILED_BRING_REVIEW.getMessage());
         }
 
-        return result;
-    }
+        PagingVO result = PagingVO.builder()
+                .total(total)
+                .totalPageNum(totalPageNum)
+                .currentPage(currentPageNum)
+                .data(data)
+                .build();
 
-    private Map<String, Object> makeMap(String s, Object o) {
-        Map<String, Object> map = new HashMap<>();
-        map.put(s, o);
-        return map;
+        return result;
     }
 
     public void addMovie(Movie movie){
