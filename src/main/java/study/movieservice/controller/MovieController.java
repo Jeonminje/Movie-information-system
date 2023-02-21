@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import study.movieservice.controller.aop.annotation.LoginCheck;
 import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.movie.Review;
-import study.movieservice.service.MovieService;
+import study.movieservice.service.ReviewService;
 
 import static study.movieservice.domain.ExceptionMessageConst.SUCCESS_SAVE_REVIEW;
 
@@ -15,13 +15,13 @@ import static study.movieservice.domain.ExceptionMessageConst.SUCCESS_SAVE_REVIE
 @RequestMapping("/movies")
 public class MovieController {
 
-    private final MovieService movieService;
+    private final ReviewService reviewService;
 
     @PostMapping("/review")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     @LoginCheck
     public String saveReview(@RequestBody Review review){
-        movieService.saveReview(review);
+        reviewService.saveReview(review);
         return SUCCESS_SAVE_REVIEW.getMessage();
     }
 
@@ -30,6 +30,6 @@ public class MovieController {
     @LoginCheck
     public PagingVO getReviewList(@RequestParam(defaultValue = "1") Integer currentPageNum){
 
-        return movieService.getReviewList(currentPageNum);
+        return reviewService.getReviewList(currentPageNum);
     }
 }
