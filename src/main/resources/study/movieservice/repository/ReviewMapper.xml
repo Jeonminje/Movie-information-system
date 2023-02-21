@@ -7,6 +7,11 @@
         values (#{movieId}, #{memberId}, #{content},#{rating}, current_timestamp , current_timestamp)
     </insert>
 
+    <delete id="delete">
+        delete from review
+        where id = #{reviewId}
+    </delete>
+
     <select id="getTotalRowCount" resultType="int">
         select count (*)
         from review

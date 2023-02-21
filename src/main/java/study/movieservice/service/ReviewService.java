@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_REVIEW;
+import static study.movieservice.domain.ExceptionMessageConst.FAILED_DELETE_REVIEW;
 
 @Service
 public class ReviewService {
@@ -37,6 +38,15 @@ public class ReviewService {
                 .content(reviewDto.getContent())
                 .rating(reviewDto.getRating()).build();
         reviewMapper.save(review);
+    }
+
+    public void deleteReview(Long reviewId) {
+        try{
+            reviewMapper.delete(reviewId);
+        } catch (DataAccessException e){
+            throw new IllegalArgumentException(FAILED_DELETE_REVIEW.getMessage());
+        }
+
     }
 
     public PagingVO getReviewList(Integer currentPageNum){

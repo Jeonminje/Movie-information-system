@@ -9,6 +9,7 @@ import java.util.List;
 @Mapper
 public interface ReviewMapper {
     void save(Review review);
+    void delete(Long reviewId);
     int getTotalRowCount();
     List<ReviewVO> getReviewList(int startIdx);
 }

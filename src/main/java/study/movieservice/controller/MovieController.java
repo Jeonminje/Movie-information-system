@@ -8,7 +8,7 @@ import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.movie.Review;
 import study.movieservice.service.ReviewService;
 
-import static study.movieservice.domain.ExceptionMessageConst.SUCCESS_SAVE_REVIEW;
+import static study.movieservice.domain.ExceptionMessageConst.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,11 +25,21 @@ public class MovieController {
         return SUCCESS_SAVE_REVIEW.getMessage();
     }
 
-    @GetMapping("/review/list")
+    @DeleteMapping ("/review")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginCheck
+    public String deleteReview(@RequestParam Long reviewId){
+        reviewService.deleteReview(reviewId);
+        return SUCCESS_DELETE_REVIEW.getMessage();
+    }
+
+    @GetMapping("/review")
     @ResponseStatus(HttpStatus.OK)
     @LoginCheck
     public PagingVO getReviewList(@RequestParam(defaultValue = "1") Integer currentPageNum){
 
         return reviewService.getReviewList(currentPageNum);
     }
+
+
 }
