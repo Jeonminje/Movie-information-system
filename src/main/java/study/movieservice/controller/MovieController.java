@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import study.movieservice.domain.movie.Recommend;
 import study.movieservice.service.RecommendService;
 
-import static study.movieservice.domain.ExceptionMessageConst.SUCCESS_RECOMMEND_UPDATE;
+import static study.movieservice.domain.ExceptionMessageConst.*;
 
 
 @RestController
@@ -17,8 +17,22 @@ public class MovieController {
 
     @PostMapping("/recommend-reviews")
     @ResponseStatus(HttpStatus.OK)
+    public String recommendJoin(@RequestBody Recommend recommend) {
+        recommendService.recommendJoin(recommend);
+        return SUCCESS_RECOMMEND_JOIN.getMessage();
+    }
+
+    @PatchMapping("/recommend-reviews")
+    @ResponseStatus(HttpStatus.OK)
     public String recommendUpdate(@RequestBody Recommend recommend) {
-        recommendService.recommendHandle(recommend);
+        recommendService.recommendUpdate(recommend);
         return SUCCESS_RECOMMEND_UPDATE.getMessage();
+    }
+
+    @DeleteMapping("/recommend-reviews")
+    @ResponseStatus(HttpStatus.OK)
+    public String recommendDelete(@RequestBody Recommend recommend) {
+        recommendService.recommendDelete(recommend);
+        return SUCCESS_RECOMMEND_DELETE.getMessage();
     }
 }

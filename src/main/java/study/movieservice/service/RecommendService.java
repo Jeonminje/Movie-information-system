@@ -8,44 +8,44 @@ import study.movieservice.repository.RecommendMapper;
 
 import javax.servlet.http.HttpSession;
 
+import static study.movieservice.domain.ExceptionMessageConst.*;
+
 @Service
 @RequiredArgsConstructor
 public class RecommendService {
 
     private final RecommendMapper recommendMapper;
-    private final HttpSession httpSession;
+    private final SessionManager sessionManager;
 
-    public void recommendHandle(Recommend inputRecommend){
+    public void recommendJoin(Recommend inputRecommend) {
+        if (recommendMapper.findByReviewIdAndMemberId(inputRecommend.getReviewId(), inputRecommend.getMemberId()).isEmpty()) {
 
-        Long memberId = (Long) httpSession.getAttribute(SessionConst.MEMBER_ID);
-        Long reviewId=inputRecommend.getReviewId();
+            Long memberId = sessionManager.getMemberId();
 
-        if(recommendMapper.findByReviewIdAndMemberId(memberId,reviewId).isPresent()){
-            recommendUpdate(inputRecommend, memberId, reviewId);
+            Recommend recommend = Recommend.builder()
+                    .memberId(memberId)
+                    .reviewId(inputRecommend.getReviewId())
+                    .recommendState(inputRecommend.getRecommendState())
+                    .build();
+
+            recommendMapper.reviewJoin(recommend);
         }
-        else {
-            reviewJoin(inputRecommend, memberId);
-        }
+        else throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
     }
 
-    private void recommendUpdate(Recommend inputRecommend, Long memberId, Long reviewId) {
-        Recommend saved=(recommendMapper.findByReviewIdAndMemberId(memberId, reviewId)).get();
+    public void recommendUpdate(Recommend inputRecommend) {
+        Long memberId = sessionManager.getMemberId();
 
-        if(saved.getRecommendState()!= inputRecommend.getRecommendState()){
-            recommendMapper.reviewUpdate(inputRecommend);
-        }
-        else{
-            recommendMapper.deleteRecommend(memberId, reviewId);
-        }
+        if (recommendMapper.findByReviewIdAndMemberId(inputRecommend.getReviewId(), memberId).isPresent())
+            recommendMapper.reviewUpdate(inputRecommend, memberId);
+        else throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
     }
 
-    private void reviewJoin(Recommend inputRecommend, Long memberId) {
-        Recommend recommend = Recommend.builder()
-                .memberId(memberId)
-                .reviewId(inputRecommend.getReviewId())
-                .recommendState(inputRecommend.getRecommendState())
-                .build();
+    public void recommendDelete(Recommend inputRecommend) {
+        Long memberId = sessionManager.getMemberId();
 
-        recommendMapper.reviewJoin(recommend);
+        if (recommendMapper.findByReviewIdAndMemberId(inputRecommend.getReviewId(), memberId).isPresent())
+            recommendMapper.deleteRecommend(memberId, inputRecommend.getReviewId());
+        else throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
     }
 }

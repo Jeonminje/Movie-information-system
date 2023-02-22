@@ -16,9 +16,9 @@
 
     <update id="reviewUpdate" parameterType="Recommend">
         update recommend
-        set recommend_state=#{recommendState}
+        set recommend_state=#{recommend.recommendState}
         where member_id = #{memberId}
-          and review_id = #{reviewId}
+          and review_id = #{recommend.reviewId}
     </update>
 
     <delete id="deleteRecommend">
