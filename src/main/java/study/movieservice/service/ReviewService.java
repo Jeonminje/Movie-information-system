@@ -12,8 +12,7 @@ import study.movieservice.repository.ReviewMapper;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_REVIEW;
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_DELETE_REVIEW;
+import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_DATA;
 
 @Service
 public class ReviewService {
@@ -44,7 +43,7 @@ public class ReviewService {
         try{
             reviewMapper.delete(reviewId);
         } catch (DataAccessException e){
-            throw new IllegalArgumentException(FAILED_DELETE_REVIEW.getMessage());
+            throw new IllegalArgumentException(FAILED_BRING_DATA.getMessage());
         }
 
     }
@@ -61,7 +60,7 @@ public class ReviewService {
             data = reviewMapper.getReviewList(startIdx);
             totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
         } catch (DataAccessException e){
-            throw  new IllegalArgumentException(FAILED_BRING_REVIEW.getMessage());
+            throw  new IllegalArgumentException(FAILED_BRING_DATA.getMessage());
         }
 
         PagingVO result = PagingVO.builder()

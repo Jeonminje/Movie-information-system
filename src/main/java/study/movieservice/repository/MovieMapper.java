@@ -7,5 +7,5 @@ import study.movieservice.domain.movie.Movie;
 public interface MovieMapper {
 
     void save(Movie movie);
-
+    Movie getMovie(Long movieId);
 }
