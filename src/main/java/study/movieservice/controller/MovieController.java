@@ -18,7 +18,7 @@ public class MovieController {
     @PostMapping("/recommend-reviews")
     @ResponseStatus(HttpStatus.OK)
     public String recommendJoin(@RequestBody Recommend recommend) {
-        recommendService.recommendJoin(recommend);
+        recommendService.recommendSave(recommend);
         return SUCCESS_RECOMMEND_JOIN.getMessage();
     }
 

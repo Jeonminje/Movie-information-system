@@ -8,11 +8,11 @@ import java.util.Optional;
 
 @Mapper
 public interface RecommendMapper {
-    void reviewJoin(Recommend recommend);
+    void recommendSave(Recommend recommend);
 
-    Optional<Recommend> findByReviewIdAndMemberId(Long reviewId, Long memberId);
+    boolean findByReviewIdAndMemberId(Long reviewId, Long memberId);
 
-    void reviewUpdate(@Param("recommend") Recommend recommend,@Param("memberId") Long memberId);
+    void recommendUpdate(@Param("recommend") Recommend recommend,@Param("memberId") Long memberId);
 
-    void deleteRecommend(Long memberId, Long reviewId);
+    void recommendDelete(Long memberId, Long reviewId);
 }
