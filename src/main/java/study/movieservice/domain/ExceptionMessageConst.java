@@ -23,7 +23,14 @@ public enum ExceptionMessageConst {
 
     SUCCESS_SIGN_UP("회원가입이 완료되었습니다."),
 
-    SUCCESS_SAVE_MOVIE("영화등록이 완료되었습니다.");
+    SUCCESS_SAVE_MOVIE("영화등록이 완료되었습니다."),
+    SUCCESS_SAVE_POSTER("포스터등록이 완료되었습니다."),
+    FAILED_FILE_RECEIVE("파일을 불러오는데 실패했습니다. 다시한번 확인해주세요"),
+
+    SUCCESS_RECOMMEND_JOIN("입력이 완료되었습니다."),
+    SUCCESS_RECOMMEND_UPDATE("변경이 완료되었습니다."),
+    SUCCESS_RECOMMEND_DELETE("취소가 완료되었습니다."),
+    FAILED_RECOMMEND_REQUEST("새로고침 후 다시 시도해주세요");
 
     private final String message;
 }
