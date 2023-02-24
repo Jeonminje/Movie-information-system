@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="study.movieservice.repository.MovieMapper">
-    <insert id="save" useGeneratedKeys="true" keyProperty="movieId">
-        insert into movie(movie_name, genre, actor, running_time, supervisor, opening_date, updated_at, created_at)
-        values (#{movieName}, #{genre}, #{actor}, #{runningTime},#{supervisor}, #{openingDate}, current_timestamp , current_timestamp)
-    </insert>
-
+<mapper namespace="study.movieservice.repository.PosterMapper">
     <insert id="savePoster" useGeneratedKeys="true" keyProperty="posterId">
         insert into poster(movie_id, save_file_path, updated_at, created_at)
         values (#{movieId}, #{saveFilePath}, current_timestamp , current_timestamp)

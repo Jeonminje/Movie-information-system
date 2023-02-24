@@ -19,4 +19,8 @@ public class SessionManager {
     public void deleteAll(){
         session.invalidate();
     }
+
+    public Long getMemberId(){
+        return (Long) session.getAttribute(SessionConst.MEMBER_ID);
+    }
 }
