@@ -18,7 +18,7 @@
     </select>
 
     <select id="getReviewList" resultType="ReviewVO">
-        select r.id as reviewId, movie_id, login_id, r.member_id as member_id, nickname, content, rating
+        select r.id as reviewId, movie_id, login_id, r.member_id as member_id, nickname, content, rating, like_count, unlike_count
         from review as r left join member as m
         on r.member_id = m.id
         order by reviewId Desc

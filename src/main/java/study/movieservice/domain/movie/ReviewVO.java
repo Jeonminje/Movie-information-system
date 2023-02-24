@@ -13,4 +13,6 @@ public class ReviewVO {
     private final String nickname;
     private final String content;
     private final Double rating;
+    private final Long likeCount;
+    private final Long unlikeCount;
 }
