@@ -57,7 +57,7 @@ public class MemberService {
             Member findMember = finding.get();
             if(BCrypt.checkpw(password, findMember.getLoginPassword())){
 
-                sessionManager.storeLoginIdAndNickname(findMember.getMemberId());
+                sessionManager.storeLoginId(findMember.getMemberId());
                 return;
             }
         }

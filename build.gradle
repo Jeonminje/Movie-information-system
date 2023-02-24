@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	//using aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.json:json:20200518'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
