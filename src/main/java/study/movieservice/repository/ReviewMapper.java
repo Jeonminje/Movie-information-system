@@ -12,4 +12,14 @@ public interface ReviewMapper {
     void delete(Long reviewId);
     int getTotalRowCount();
     List<ReviewVO> getReviewList(int startIdx);
+
+    void increaseLikeCount(Long reviewId);
+
+    void increaseDislikeCount(Long reviewId);
+
+    void decreaseLikeCount(Long reviewId);
+
+    void decreaseDislikeCount(Long reviewId);
+
+    Long getLikeCount(Long reviewId);
 }
