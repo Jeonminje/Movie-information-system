@@ -1,6 +1,7 @@
 package study.movieservice.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import study.movieservice.domain.movie.Movie;
@@ -9,6 +10,7 @@ import study.movieservice.domain.movie.RatingVO;
 import study.movieservice.repository.MovieMapper;
 import study.movieservice.repository.ReviewMapper;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ import static study.movieservice.domain.ExceptionMessageConst.ILLEGAL_MOVIE_ID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MovieService {
 
     private final MovieMapper movieMapper;
@@ -39,6 +42,8 @@ public class MovieService {
             ratingCnt = reviewMapper.getRowCount(movieId);
             data = reviewMapper.getRatingList(movieId);
         }catch (DataAccessException e){
+            SQLException se = (SQLException) e.getRootCause();
+            log.warn("DataAccessException : {}", se.getMessage());
             throw new IllegalArgumentException(FAILED_BRING_DATA.getMessage());
         }
 

@@ -8,7 +8,7 @@
     </insert>
 
     <select id="getMovie" resultType="Movie">
-        select *
+        select id, movie_name, genre, actor, running_time, supervisor, opening_date
         from movie
         where id=#{movieId}
     </select>
