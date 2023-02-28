@@ -73,7 +73,6 @@ public class ReviewService {
 
         return result;
     }
-
     public void increaseLikeCount(Long reviewId){
         reviewMapper.increaseLikeCount(reviewId);
     }
@@ -87,5 +86,8 @@ public class ReviewService {
     }
     public void decreaseDislikeCount(Long reviewId){
         reviewMapper.decreaseDislikeCount(reviewId);
+    }
+    public Long getLikeCount(Long reviewId){
+        return reviewMapper.getLikeCount(reviewId);
     }
 }

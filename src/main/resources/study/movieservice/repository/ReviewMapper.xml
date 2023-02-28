@@ -48,5 +48,11 @@
         set dislike_count=dislike_count-1
         where id = #{reviewId}
     </update>
+
+    <select id="getLikeCount" resultType="int">
+        select like_count
+        from review
+        where review_id=#{reviewId}
+    </select>
 </mapper>
 

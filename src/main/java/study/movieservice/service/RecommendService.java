@@ -24,7 +24,6 @@ public class RecommendService {
      *                       1일때 추천, 0일때 비추천을 나타내는 recommendState 정보보가담겨있는 Recommend 객체
      * @throws IllegalArgumentException 만약 reviewId, memberId가 일치하는 객체가 DB에 없을때 발생
      */
-    @Transactional
     public void recommendSave(Recommend inputRecommend) {
 
         Long memberId = sessionManager.getMemberId();
@@ -51,7 +50,6 @@ public class RecommendService {
      *                       1일때 추천, 0일때 비추천을 나타내는 recommendState 정보보가담겨있는 Recommend 객체
      * @throws IllegalArgumentException 만약 reviewId, memberId가 일치하는 객체가 DB에 없을때 발생
      */
-    @Transactional
     public void recommendUpdate(Recommend inputRecommend) {
 
         Long memberId = sessionManager.getMemberId();
@@ -78,7 +76,7 @@ public class RecommendService {
      *                       1일때 추천, 0일때 비추천을 나타내는 recommendState 정보보가담겨있는 Recommend 객체
      * @throws IllegalArgumentException 만약 reviewId, memberId가 일치하는 객체가 DB에 없을때 발생
      */
-    @Transactional
+
     public void recommendDelete(Recommend inputRecommend) {
 
         Long memberId = sessionManager.getMemberId();
