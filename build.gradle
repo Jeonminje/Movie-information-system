@@ -32,11 +32,13 @@ dependencies {
 	//using aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.json:json:20200518'
+	//validation
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.6'
 
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
 }
 
 tasks.named('test') {
