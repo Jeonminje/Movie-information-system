@@ -66,7 +66,7 @@ public class MovieService {
      * 전체 영화목록 또는 현재 상영중인 영화(개봉일 1달 이내) 목록들을 불러오는 메소드
      *
      * @param currentPageNum 현재페이지를 나타내는 Integer 값
-     * @param status 모든영화목록(ALL)을 가져올지 현재상영영화만 가져올지(CURRENT)에대한 Boolean 값
+     * @param status 모든영화목록(ALL)을 가져올지 현재상영영화만 가져올지(CURRENT)에대한 String 값
      * @return PagingVO 현재페이지에 해당하는 데이터들의 값을 PagingVO 데이터타입으로 반환
      */
     public PagingVO getMovieAndPosterList(Integer currentPageNum,String status){
