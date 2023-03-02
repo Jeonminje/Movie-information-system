@@ -1,23 +1,19 @@
 package study.movieservice.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import study.movieservice.domain.PagingVO;
-import study.movieservice.domain.movie.Movie;
-import study.movieservice.domain.movie.MovieAndPosterVO;
-import study.movieservice.domain.movie.Poster;
-import study.movieservice.domain.movie.ReviewVO;
+import study.movieservice.domain.movie.*;
 import study.movieservice.repository.MovieMapper;
 import study.movieservice.repository.PosterMapper;
 import study.movieservice.service.fileIO.FileIO;
 import java.io.IOException;
 import java.util.List;
 
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_REVIEW;
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_FILE_RECEIVE;
+import static study.movieservice.domain.ExceptionMessageConst.*;
+import static study.movieservice.domain.movie.MovieListType.*;
 
 @Service
 public class MovieService {
@@ -70,29 +66,33 @@ public class MovieService {
      * 전체 영화목록 또는 현재 상영중인 영화(개봉일 1달 이내) 목록들을 불러오는 메소드
      *
      * @param currentPageNum 현재페이지를 나타내는 Integer 값
-     * @param status 모든영화목록(1)을 가져올지 현재상영영화만 가져올지(0)에대한 Boolean 값
+     * @param status 모든영화목록(ALL)을 가져올지 현재상영영화만 가져올지(CURRENT)에대한 Boolean 값
      * @return PagingVO 현재페이지에 해당하는 데이터들의 값을 PagingVO 데이터타입으로 반환
      */
-    public PagingVO getMovieAndPosterList(Integer currentPageNum,Boolean status){
+    public PagingVO getMovieAndPosterList(Integer currentPageNum,String status){
 
-        int total;
+        int total=0;
         int totalPageNum;
         int startIdx = (currentPageNum - 1) * moviePerPage;
-        List<MovieAndPosterVO> data;
+        List<MovieAndPosterVO> data=null;
 
         try{
-            if(status.booleanValue()) {
+            MovieListType listStatus=MovieListType.valueOf(status);
+
+            if(listStatus==ALL) {
                 total = movieMapper.getTotalRowCount();
                 data = movieMapper.getAllMovieAndPosterList(startIdx,moviePerPage);
             }
-            else {
+            else if(listStatus==CURRENT){
                 total = movieMapper.getCurrentRowCount();
                 data = movieMapper.getCurrentMovieAndPosterList(startIdx,moviePerPage);
             }
 
             totalPageNum = (int) Math.ceil((double) total/moviePerPage);
+        } catch(IllegalArgumentException e){
+            throw new IllegalArgumentException(INVALID_STATUS.getMessage());
         } catch (DataAccessException e){
-            throw  new IllegalArgumentException(FAILED_BRING_REVIEW.getMessage());
+            throw  new IllegalArgumentException(FAILED_BRING_MOVIES.getMessage());
         }
 
         PagingVO result = PagingVO.builder()

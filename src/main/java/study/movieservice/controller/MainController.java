@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import study.movieservice.controller.aop.annotation.LoginCheck;
 import study.movieservice.domain.PagingVO;
+import study.movieservice.domain.movie.MovieListType;
 import study.movieservice.domain.movie.Movie;
 import study.movieservice.service.MovieService;
 import static study.movieservice.domain.ExceptionMessageConst.SUCCESS_SAVE_MOVIE;
@@ -31,9 +31,9 @@ public class MainController {
         return SUCCESS_SAVE_POSTER.getMessage();
     }
 
-    @GetMapping("/get-movies-list")
+    @GetMapping("/movies-list")
     @ResponseStatus(HttpStatus.OK)
-    public PagingVO getMovieAndPosterList(@RequestParam Integer currentPageNum,Boolean status){
+    public PagingVO getMovieAndPosterList(@RequestParam Integer currentPageNum, String status){
 
         return movieService.getMovieAndPosterList(currentPageNum,status);
     }
