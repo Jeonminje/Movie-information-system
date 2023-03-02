@@ -1,5 +1,6 @@
 package study.movieservice.service;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mindrot.jbcrypt.BCrypt;
@@ -30,7 +31,7 @@ class MemberServiceTest {
     String testEmail="test@naver.com";
 
     @Test
-    public void addMember_회원가입() {
+    public void addMember_회원가입_성공할때() {
         MemberDTO memberDTO=new MemberDTO(testEmail,testId,"20","test");
 
         doNothing().when(memberMapper).save(any(Member.class));
@@ -40,7 +41,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void checkLoginId_존재할때() {
+    void checkLoginId_입력아이디가_이미존재할때() {
         doReturn(true).when(memberMapper).findByLoginId(testId);
 
         assertThatThrownBy(()->memberService.checkLoginId(testId))
@@ -48,7 +49,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void checkLoginId_존재하지않을때() {
+    void checkLoginId_입력아이디가_존재하지않을때() {
         doReturn(false).when(memberMapper).findByLoginId(testId);
 
         memberService.checkLoginId(testId);
@@ -57,7 +58,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void logIn_성공할때() throws LoginException {
+    void logIn_아이디_비밀번호가_일치할때() throws LoginException {
         Member member=member();
         Member encodedMember=encodedMember();
 
@@ -70,7 +71,7 @@ class MemberServiceTest {
     }
 
     @Test
-    void logIn_성공못할때(){
+    void logIn_아이디_비밀번호가_일치하지않을때(){
         Member member=member();
 
         doReturn(Optional.empty()).when(memberMapper).getMemberForLogIn(testId);
