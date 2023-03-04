@@ -1,14 +1,16 @@
 package study.movieservice.service;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import study.movieservice.domain.movie.Movie;
+import study.movieservice.domain.movie.Poster;
 import study.movieservice.repository.MovieMapper;
 import study.movieservice.repository.PosterMapper;
 import study.movieservice.service.fileIO.FileIO;
@@ -18,26 +20,71 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 
-@SpringBootTest
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
 
-    @Autowired
+    @Mock
     private MovieMapper movieMapper;
-    @Autowired
+    @Mock
     private PosterMapper posterMapper;
-    @Autowired
+    @Mock
     private FileIO fileIO;
+    @InjectMocks
     private MovieService movieService;
-
-    @BeforeEach
-    public void beforeEach(){
-        movieService = new MovieService(movieMapper, posterMapper, fileIO);
-    }
 
     @Test
     @DisplayName("영화 저장 하기")
-    @Transactional
     void addMovie() {
+        // given
+        doNothing().when(movieMapper).save(any(Movie.class));
+
+        //when
+        movieService.addMovie(getMovie());
+
+        //then
+        verify(movieMapper, times(1)).save(any(Movie.class));
+    }
+
+    @Test
+    @DisplayName("포스터 저장하기")
+    void addPoster() throws IOException {
+        //given
+        doNothing().when(posterMapper).savePoster(any(Poster.class));
+        MockMultipartFile mockMultipartFile = getMockMultipartFile();
+
+        //when
+        movieService.addPoster(mockMultipartFile, 3L);
+
+        //then
+        verify(posterMapper, times(1)).savePoster(any(Poster.class));
+    }
+
+    @Test
+    @DisplayName("포스터 저장시 예외 처리")
+    void exceptionPoster() throws IOException {
+        //given
+        doThrow(new IOException()).when(fileIO).uploadFile(any(MultipartFile.class));
+        MockMultipartFile mockMultipartFile = getMockMultipartFile();
+
+        //when
+        Assertions.assertThatThrownBy(() -> movieService.addPoster(mockMultipartFile, 3L)).isInstanceOf(IllegalArgumentException.class);
+
+        //then
+        verify(posterMapper, times(0)).savePoster(any(Poster.class));
+    }
+
+    private MockMultipartFile getMockMultipartFile() throws IOException {
+        String fileName = "testMoviePoster";
+        String contentType = "PNG";
+        String filePath = "C:\\Users\\plus1802\\Desktop\\winter_project\\testInputImage\\앤트맨.PNG";
+
+        FileInputStream fileInputStream = new FileInputStream(new File(filePath));
+        return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
+    }
+
+    private Movie getMovie(){
         LocalDate openingDate = LocalDate.of(2007,11,26);
 
         Movie movie = Movie.builder()
@@ -48,35 +95,6 @@ class MovieServiceTest {
                 .supervisor("봉준호")
                 .openingDate(openingDate)
                 .build();
-
-        movieService.addMovie(movie);
-        Long movieId = movie.getMovieId();
-
-        Movie find = movieMapper.getMovie(movieId);
-
-        Assertions.assertThat(movie).isEqualTo(find);
-    }
-
-    @Test
-    @DisplayName("포스터 저장하기")
-    void addPoster() throws IOException {
-
-        String fileName = "testMoviePoster";
-        String contentType = "PNG";
-        String filePath = "C:\\Users\\plus1802\\Desktop\\winter_project\\testInputImage\\앤트맨.PNG";
-
-        MockMultipartFile mockMultipartFile = getMockMultipartFile(fileName, contentType, filePath);
-
-        movieService.addPoster(mockMultipartFile, 3L);
-
-        String getFileName = mockMultipartFile.getOriginalFilename().toLowerCase();
-        String fileName2 = fileName.toLowerCase() + "." + contentType;
-
-        Assertions.assertThat(getFileName.toLowerCase()).isEqualTo(fileName2.toLowerCase());
-    }
-
-    private MockMultipartFile getMockMultipartFile(String fileName, String contentType, String path) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(new File(path));
-        return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
+        return movie;
     }
 }
