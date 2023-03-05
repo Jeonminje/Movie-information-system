@@ -2,7 +2,6 @@ package study.movieservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import study.movieservice.domain.movie.Movie;
 import study.movieservice.domain.movie.MovieInfo;
@@ -10,11 +9,9 @@ import study.movieservice.domain.movie.RatingVO;
 import study.movieservice.repository.MovieMapper;
 import study.movieservice.repository.ReviewMapper;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_DATA;
 import static study.movieservice.domain.ExceptionMessageConst.ILLEGAL_MOVIE_ID;
 
 @Service
@@ -36,16 +33,10 @@ public class MovieService {
         Integer ratingCnt;
         List<RatingVO> data;
 
-        try{
-            movieOptional = Optional.ofNullable(movieMapper.getMovie(movieId));
-            ratingAverage = reviewMapper.getRatingAverage(movieId);
-            ratingCnt = reviewMapper.getRowCount(movieId);
-            data = reviewMapper.getRatingList(movieId);
-        }catch (DataAccessException e){
-            SQLException se = (SQLException) e.getRootCause();
-            log.warn("DataAccessException : {}", se.getMessage());
-            throw new IllegalArgumentException(FAILED_BRING_DATA.getMessage());
-        }
+        movieOptional = Optional.ofNullable(movieMapper.getMovie(movieId));
+        ratingAverage = reviewMapper.getRatingAverage(movieId);
+        ratingCnt = reviewMapper.getRowCount(movieId);
+        data = reviewMapper.getRatingList(movieId);
 
         if(!movieOptional.isPresent()){
             throw new IllegalArgumentException(ILLEGAL_MOVIE_ID.getMessage());
