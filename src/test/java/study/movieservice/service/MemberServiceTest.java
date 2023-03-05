@@ -31,7 +31,8 @@ class MemberServiceTest {
     String testEmail="test@naver.com";
 
     @Test
-    public void addMember_회원가입_성공할때() {
+    @DisplayName("회원가입 성공할때")
+    public void addMember() {
         MemberDTO memberDTO=new MemberDTO(testEmail,testId,"20","test");
 
         doNothing().when(memberMapper).save(any(Member.class));
@@ -41,7 +42,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void checkLoginId_입력아이디가_이미존재할때() {
+    @DisplayName("입력아이디가 이미존재할때")
+    void checkLoginId_Exist() {
         doReturn(true).when(memberMapper).findByLoginId(testId);
 
         assertThatThrownBy(()->memberService.checkLoginId(testId))
@@ -49,7 +51,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void checkLoginId_입력아이디가_존재하지않을때() {
+    @DisplayName("입력아이디가 존재하지않을때")
+    void checkLoginId_Not_Exist() {
         doReturn(false).when(memberMapper).findByLoginId(testId);
 
         memberService.checkLoginId(testId);
@@ -58,7 +61,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void logIn_아이디_비밀번호가_일치할때() throws LoginException {
+    @DisplayName("아이디 비밀번호가 일치할때")
+    void logIn_Correspond() throws LoginException {
         Member member=member();
         Member encodedMember=encodedMember();
 
@@ -71,7 +75,8 @@ class MemberServiceTest {
     }
 
     @Test
-    void logIn_아이디_비밀번호가_일치하지않을때(){
+    @DisplayName("아이디 비밀번호가 일치하지않을때")
+    void logIn_Not_Correspond(){
         Member member=member();
 
         doReturn(Optional.empty()).when(memberMapper).getMemberForLogIn(testId);
