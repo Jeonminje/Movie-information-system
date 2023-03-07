@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import study.movieservice.domain.ExceptionMessageConst;
 
 import javax.security.auth.login.LoginException;
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GeneralExceptionHandler {
@@ -44,4 +45,9 @@ public class GeneralExceptionHandler {
         return ExceptionMessageConst.FAILED_SIGN_UP.getMessage();
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String constraintViolationHandler(ConstraintViolationException e){
+        return ExceptionMessageConst.FAILED_DATA_TRANSMISSION_SERVICE.getMessage();
+    }
 }

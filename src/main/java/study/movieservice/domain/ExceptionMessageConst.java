@@ -23,6 +23,7 @@ public enum ExceptionMessageConst {
 
     SUCCESS_SIGN_UP("회원가입이 완료되었습니다."),
     FAILED_SIGN_UP("회원가입에 실패하였습니다. 입력값들을 형식에 맞춰서 확인해주세요"),
+    FAILED_DATA_TRANSMISSION_SERVICE("데이터 전송중 오류가 발생했습니다. 다시시도해주세요"),
 
     SUCCESS_SAVE_POSTER("포스터등록이 완료되었습니다."),
     FAILED_FILE_RECEIVE("파일을 불러오는데 실패했습니다. 다시한번 확인해주세요"),
