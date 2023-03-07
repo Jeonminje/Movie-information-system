@@ -28,15 +28,10 @@ public class MovieService {
 
     public MovieInfo getMovieAndRating(Long movieId){
 
-        Optional<Movie> movieOptional;
-        Double ratingAverage;
-        Integer ratingCnt;
-        List<RatingVO> data;
-
-        movieOptional = Optional.ofNullable(movieMapper.getMovie(movieId));
-        ratingAverage = reviewMapper.getRatingAverage(movieId);
-        ratingCnt = reviewMapper.getRowCount(movieId);
-        data = reviewMapper.getRatingList(movieId);
+        Optional<Movie> movieOptional = Optional.ofNullable(movieMapper.getMovie(movieId));
+        Double ratingAverage = reviewMapper.getRatingAverage(movieId);
+        Integer ratingCnt = reviewMapper.getRowCount(movieId);
+        List<RatingVO> data = reviewMapper.getRatingList(movieId);
 
         if(!movieOptional.isPresent()){
             throw new IllegalArgumentException(ILLEGAL_MOVIE_ID.getMessage());

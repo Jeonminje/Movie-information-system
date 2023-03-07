@@ -1,7 +1,6 @@
 package study.movieservice.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.SessionConst;
@@ -11,8 +10,6 @@ import study.movieservice.repository.ReviewMapper;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_DATA;
 
 @Service
 public class ReviewService {
@@ -40,28 +37,16 @@ public class ReviewService {
     }
 
     public void deleteReview(Long reviewId) {
-        try{
-            reviewMapper.delete(reviewId);
-        } catch (DataAccessException e){
-            throw new IllegalArgumentException(FAILED_BRING_DATA.getMessage());
-        }
 
+        reviewMapper.delete(reviewId);
     }
 
     public PagingVO getReviewList(Integer currentPageNum){
 
-        int total;
-        int totalPageNum;
+        int total = reviewMapper.getTotalRowCount();
+        int totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
         int startIdx = (currentPageNum - 1) * reviewPerPage;
-        List<ReviewVO> data;
-
-        try{
-            total = reviewMapper.getTotalRowCount();
-            data = reviewMapper.getReviewList(startIdx);
-            totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
-        } catch (DataAccessException e){
-            throw  new IllegalArgumentException(FAILED_BRING_DATA.getMessage());
-        }
+        List<ReviewVO> data = reviewMapper.getReviewList(startIdx);
 
         PagingVO result = PagingVO.builder()
                 .total(total)
