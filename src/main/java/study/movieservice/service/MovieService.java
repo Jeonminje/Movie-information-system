@@ -79,14 +79,8 @@ public class MovieService {
         try{
             MovieListType listStatus=MovieListType.valueOf(status);
 
-            if(listStatus==ALL) {
-                total = movieMapper.getTotalRowCount();
-                data = movieMapper.getAllMovieAndPosterList(startIdx,moviePerPage);
-            }
-            else if(listStatus==CURRENT){
-                total = movieMapper.getCurrentRowCount();
-                data = movieMapper.getCurrentMovieAndPosterList(startIdx,moviePerPage);
-            }
+            total=(listStatus==ALL)?movieMapper.getTotalRowCount():movieMapper.getCurrentRowCount();
+            data=(listStatus==ALL)?movieMapper.getAllMovieAndPosterList(startIdx,moviePerPage):movieMapper.getCurrentMovieAndPosterList(startIdx,moviePerPage);
 
             totalPageNum = (int) Math.ceil((double) total/moviePerPage);
         } catch(IllegalArgumentException e){
