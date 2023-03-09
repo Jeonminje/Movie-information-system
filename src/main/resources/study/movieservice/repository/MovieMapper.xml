@@ -4,12 +4,12 @@
 <mapper namespace="study.movieservice.repository.MovieMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="movieId">
         insert into movie(movie_name, genre, actor, running_time, supervisor, opening_date, updated_at, created_at)
-        values (#{movieName}, #{genre}, #{actor}, #{runningTime},#{supervisor}, #{openingDate}, current_timestamp , current_timestamp)
+        values ( #{movieName}, #{genre}, #{actor}, #{runningTime}, #{supervisor}, #{openingDate}, current_timestamp , current_timestamp)
     </insert>
 
-    <insert id="savePoster" useGeneratedKeys="true" keyProperty="posterId">
-        insert into poster(movie_id, save_file_path, updated_at, created_at)
-        values (#{movieId}, #{saveFilePath}, current_timestamp , current_timestamp)
-    </insert>
+    <select id="getMovie" resultType="Movie">
+        select id, movie_name, genre, actor, running_time, supervisor, opening_date
+        from movie
+        where id = #{movieId}
+    </select>
 </mapper>
-
