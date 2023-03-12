@@ -7,8 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 import study.movieservice.domain.movie.Movie;
 import study.movieservice.domain.movie.Poster;
 import study.movieservice.repository.MovieMapper;
@@ -25,6 +25,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
 
+    @Value("${testInputFilePath}")
+    private String filePath;
     @Mock
     private MovieMapper movieMapper;
     @Mock
@@ -39,12 +41,13 @@ class MovieServiceTest {
     void addMovie() {
         // given
         doNothing().when(movieMapper).save(any(Movie.class));
+        Movie movie = getMovie();
 
         //when
-        movieService.addMovie(getMovie());
+        movieService.addMovie(movie);
 
         //then
-        verify(movieMapper, times(1)).save(any(Movie.class));
+        verify(movieMapper).save(movie);
     }
 
     @Test
@@ -58,15 +61,15 @@ class MovieServiceTest {
         movieService.addPoster(mockMultipartFile, 3L);
 
         //then
-        verify(posterMapper, times(1)).savePoster(any(Poster.class));
+        verify(posterMapper).savePoster(any(Poster.class));
     }
 
     @Test
     @DisplayName("포스터 저장시 예외 처리")
     void exceptionPoster() throws IOException {
         //given
-        doThrow(new IOException()).when(fileIO).uploadFile(any(MultipartFile.class));
-        MockMultipartFile mockMultipartFile = getMockMultipartFile();
+        MockMultipartFile mockMultipartFile = getWrongMockMultipartFile();
+        doThrow(new IOException()).when(fileIO).uploadFile(mockMultipartFile);
 
         //when
         Assertions.assertThatThrownBy(() -> movieService.addPoster(mockMultipartFile, 3L)).isInstanceOf(IllegalArgumentException.class);
@@ -78,7 +81,16 @@ class MovieServiceTest {
     private MockMultipartFile getMockMultipartFile() throws IOException {
         String fileName = "testMoviePoster";
         String contentType = "PNG";
-        String filePath = "C:\\Users\\plus1802\\Desktop\\winter_project\\testInputImage\\앤트맨.PNG";
+        String filePath="C:\\Users\\plus1802\\Desktop\\winter_project\\testInputImage\\앤트맨.PNG";
+
+        FileInputStream fileInputStream = new FileInputStream(new File(filePath));
+        return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
+    }
+
+    private MockMultipartFile getWrongMockMultipartFile() throws IOException {
+        String fileName = "wrongPoster";
+        String contentType = "PNG";
+        String filePath="C:\\Users\\plus1802\\Desktop\\winter_project\\testInputImage\\wrongImg.xx";
 
         FileInputStream fileInputStream = new FileInputStream(new File(filePath));
         return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
