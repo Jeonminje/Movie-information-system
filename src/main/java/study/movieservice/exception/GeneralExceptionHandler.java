@@ -5,11 +5,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import study.movieservice.domain.ExceptionMessageConst;
 
 import javax.security.auth.login.LoginException;
+import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
 
 import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_DATA;
@@ -48,5 +51,17 @@ public class GeneralExceptionHandler {
         SQLException se = (SQLException) e.getRootCause();
         log.warn("DataAccessException : {}", se.getMessage());
         return FAILED_BRING_DATA.getMessage();
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String methodArgumentNotValidHandler(MethodArgumentNotValidException e){
+        return ExceptionMessageConst.FAILED_SIGN_UP.getMessage();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String constraintViolationHandler(ConstraintViolationException e){
+        return ExceptionMessageConst.FAILED_DATA_TRANSMISSION_SERVICE.getMessage();
     }
 }

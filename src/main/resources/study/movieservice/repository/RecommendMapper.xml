@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="study.movieservice.repository.RecommendMapper">
+    <insert id="recommendSave" useGeneratedKeys="true" keyProperty="recommendId">
+        insert into recommend(review_id, member_id, recommend_state, updated_at, created_at)
+        values (#{reviewId}, #{memberId}, #{recommendState}, current_timestamp, current_timestamp)
+    </insert>
+
+    <select id="findByReviewIdAndMemberId" resultType="boolean">
+        select exists(
+            select review_id
+            from recommend
+            where member_id = #{memberId}
+            and review_id = #{reviewId}
+        )
+    </select>
+
+    <update id="recommendUpdate" parameterType="Recommend">
+        update recommend
+        set recommend_state=#{recommend.recommendState}
+        where member_id = #{memberId}
+          and review_id = #{recommend.reviewId}
+    </update>
+
+    <delete id="recommendDelete">
+        delete
+        from recommend
+        where member_id = #{memberId}
+          and review_id = #{reviewId}
+    </delete>
+
+</mapper>
+

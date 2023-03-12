@@ -4,6 +4,7 @@ package study.movieservice.service;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import study.movieservice.domain.member.Grade;
 import study.movieservice.domain.member.Member;
 import study.movieservice.domain.member.MemberDTO;
@@ -11,6 +12,7 @@ import study.movieservice.repository.MemberMapper;
 
 import javax.mail.internet.MimeMessage;
 import javax.security.auth.login.LoginException;
+import javax.validation.Valid;
 import java.util.Optional;
 
 import static study.movieservice.domain.ExceptionMessageConst.FAILED_CHECK_ID;
@@ -18,13 +20,14 @@ import static study.movieservice.domain.ExceptionMessageConst.FAILED_LOGIN;
 
 @Service
 @RequiredArgsConstructor
+@Validated
 public class MemberService {
 
     private final MemberMapper memberMapper;
     private final MailService mailService;
     private final SessionManager sessionManager;
 
-    public void addMember(MemberDTO memberDTO){
+    public void addMember(@Valid MemberDTO memberDTO){
         String encodingPassword = BCrypt.hashpw(memberDTO.getLoginPassword(), BCrypt.gensalt());
         Member member = Member.builder()
                 .email(memberDTO.getEmail())
