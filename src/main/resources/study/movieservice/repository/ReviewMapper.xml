@@ -24,5 +24,25 @@
         order by reviewId Desc
         limit #{startIdx}, 10
     </select>
+
+    <select id="getRatingList" resultType="RatingVO">
+        select rating, count(rating)
+        from review
+        where movie_id = #{movieId}
+        group by rating
+        order by rating asc
+    </select>
+
+    <select id="getRowCount" resultType="INTEGER">
+        select count (*)
+        from review
+        where movie_id = #{movieId}
+    </select>
+
+    <select id="getRatingAverage" resultType="Double">
+        select avg (rating)
+        from review
+        where movie_id = #{movieId}
+    </select>
 </mapper>
 
