@@ -12,6 +12,7 @@ import study.movieservice.domain.member.Member;
 import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.repository.MemberMapper;
 import javax.security.auth.login.LoginException;
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,6 +40,16 @@ class MemberServiceTest {
         memberService.addMember(memberDTO);
 
         verify(memberMapper, times(1)).save(any(Member.class));
+    }
+
+    @Test
+    @DisplayName("회원가입 실패할때_컨트롤러에서 전달되는 memberDTO가 정상이 아닐때")
+    public void addMember_FAILED(){
+
+        MemberDTO memberDTO=new MemberDTO(testEmail,testId,"","1");
+
+        assertThatThrownBy(()->memberService.addMember(memberDTO))
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
