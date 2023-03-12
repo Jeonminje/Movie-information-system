@@ -15,8 +15,6 @@ import javax.security.auth.login.LoginException;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
 
-import static study.movieservice.domain.ExceptionMessageConst.FAILED_BRING_DATA;
-
 @Slf4j
 @RestControllerAdvice
 public class GeneralExceptionHandler {
@@ -50,7 +48,7 @@ public class GeneralExceptionHandler {
     public String DataAccessExceptionHandler(DataAccessException e){
         SQLException se = (SQLException) e.getRootCause();
         log.warn("DataAccessException : {}", se.getMessage());
-        return FAILED_BRING_DATA.getMessage();
+        return ExceptionMessageConst.FAILED_BRING_DATA.getMessage();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
