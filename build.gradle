@@ -28,10 +28,12 @@ dependencies {
 	//mariadb 사용을 위해 추가
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.1'
 	//using redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	//implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
 	//using aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
 	implementation 'org.json:json:20200518'
+	implementation 'org.projectlombok:lombok:1.18.22'
 
 	//유효성 검사를 위해 추가
 	implementation 'org.springframework.boot:spring-boot-starter-validation'

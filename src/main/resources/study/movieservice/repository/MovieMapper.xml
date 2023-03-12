@@ -7,9 +7,5 @@
         values (#{movieName}, #{genre}, #{actor}, #{runningTime},#{supervisor}, #{openingDate}, current_timestamp , current_timestamp)
     </insert>
 
-    <insert id="savePoster" useGeneratedKeys="true" keyProperty="posterId">
-        insert into poster(movie_id, save_file_path, updated_at, created_at)
-        values (#{movieId}, #{saveFilePath}, current_timestamp , current_timestamp)
-    </insert>
 </mapper>
 

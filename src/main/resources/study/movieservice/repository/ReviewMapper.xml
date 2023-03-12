@@ -24,5 +24,29 @@
         order by reviewId Desc
         limit #{startIdx}, 10
     </select>
+
+    <update id="increaseLikeCount">
+        update review
+        set like_count=like_count+1
+        where id = #{reviewId}
+    </update>
+
+    <update id="increaseDislikeCount">
+        update review
+        set dislike_count=dislike_count+1
+        where id = #{reviewId}
+    </update>
+
+    <update id="decreaseLikeCount">
+        update review
+        set like_count=like_count-1
+        where id = #{reviewId}
+    </update>
+
+    <update id="decreaseDislikeCount">
+        update review
+        set dislike_count=dislike_count-1
+        where id = #{reviewId}
+    </update>
 </mapper>
 
