@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import study.movieservice.domain.movie.Movie;
 import study.movieservice.domain.movie.Poster;
@@ -25,8 +24,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MovieServiceTest {
 
-    @Value("${testInputFilePath}")
-    private String filePath;
     @Mock
     private MovieMapper movieMapper;
     @Mock
