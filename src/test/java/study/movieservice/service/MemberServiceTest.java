@@ -1,5 +1,6 @@
 package study.movieservice.service;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,14 +8,21 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import study.movieservice.domain.member.Grade;
 import study.movieservice.domain.member.Member;
 import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.repository.MemberMapper;
 import javax.security.auth.login.LoginException;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.Optional;
+import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -28,6 +36,8 @@ class MemberServiceTest {
     SessionManager sessionManager;
     @InjectMocks
     MemberService memberService;
+
+    Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     String testId="testId";
     String testEmail="test@naver.com";
 
@@ -39,17 +49,20 @@ class MemberServiceTest {
         doNothing().when(memberMapper).save(any(Member.class));
         memberService.addMember(memberDTO);
 
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberDTO);
+
         verify(memberMapper, times(1)).save(any(Member.class));
+        assertThat(violations.size()).isEqualTo(0);
     }
 
     @Test
     @DisplayName("회원가입 실패할때_컨트롤러에서 전달되는 memberDTO가 정상이 아닐때")
     public void addMember_FAILED(){
+        MemberDTO memberDTO=new MemberDTO(testEmail,testId,"2","1");
 
-        MemberDTO memberDTO=new MemberDTO(testEmail,testId,"","1");
+        Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberDTO);
 
-        assertThatThrownBy(()->memberService.addMember(memberDTO))
-                .isInstanceOf(ConstraintViolationException.class);
+        assertThat(violations.size()).isEqualTo(2);
     }
 
     @Test
