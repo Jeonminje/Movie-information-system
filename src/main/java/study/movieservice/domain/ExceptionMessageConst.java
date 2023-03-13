@@ -35,7 +35,6 @@ public enum ExceptionMessageConst {
     SUCCESS_DELETE_REVIEW("리뷰가 삭제되었습니다."),
     FAILED_DELETE_REVIEW("리뷰를 삭제할 수 없습니다."),
     FAILED_BRING_REVIEW("리뷰 불러오기에 실패했습니다."),
-    FAILED_BRING_MOVIES("영화목록 불러오기에 실패했습니다."),
     INVALID_STATUS("status의 value를 확인해주세요"),
 
     SUCCESS_SAVE_MOVIE("영화등록이 완료되었습니다.");
