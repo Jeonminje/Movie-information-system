@@ -19,4 +19,6 @@ public interface MovieMapper {
     List<MovieAndPosterVO> getAllMovieAndPosterList(int startIdx,int moviePerPage);
 
     List<MovieAndPosterVO> getCurrentMovieAndPosterList(int startIdx,int moviePerPage);
+    
+    Movie getMovie(Long movieId);
 }
