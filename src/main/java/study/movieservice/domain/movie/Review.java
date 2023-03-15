@@ -13,4 +13,5 @@ public class Review {
     private final String content;
     private final Double rating;
     private final Long likeCount;
+    private final Long disLikeCount;
 }

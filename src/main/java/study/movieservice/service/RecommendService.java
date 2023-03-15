@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import study.movieservice.domain.movie.Recommend;
 import study.movieservice.repository.RecommendMapper;
 
+import static jodd.util.ThreadUtil.sleep;
 import static study.movieservice.domain.ExceptionMessageConst.*;
 
 @Service
@@ -26,18 +27,19 @@ public class RecommendService {
      */
     public void recommendSave(Recommend inputRecommend) {
 
-        Long memberId = sessionManager.getMemberId();
+        //Long memberId = sessionManager.getMemberId();
+        Long memberId=1L;
         Long reviewId=inputRecommend.getReviewId();
 
-        if (recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
-            throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
+        //if (recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
+         //   throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
 
         Recommend recommend = Recommend.builder()
                 .memberId(memberId)
                 .reviewId(inputRecommend.getReviewId())
                 .recommendState(inputRecommend.getRecommendState())
                 .build();
-
+        sleep(1000);
         recommendMapper.recommendSave(recommend);
         reviewService.increaseLikeCount(reviewId);
     }
@@ -55,8 +57,8 @@ public class RecommendService {
         Long memberId = sessionManager.getMemberId();
         Long reviewId= inputRecommend.getReviewId();
 
-        if (!recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
-            throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
+        //if (!recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
+        //    throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
 
         if(inputRecommend.getRecommendState()) {
             reviewService.increaseLikeCount(reviewId);

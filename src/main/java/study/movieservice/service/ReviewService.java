@@ -36,6 +36,8 @@ public class ReviewService {
                 .movieId(reviewDto.getMovieId())
                 .memberId(memberId)
                 .content(reviewDto.getContent())
+                .likeCount(0L)
+                .disLikeCount(0L)
                 .rating(reviewDto.getRating()).build();
         reviewMapper.save(review);
     }
