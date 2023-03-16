@@ -1,12 +1,15 @@
 package study.movieservice.service;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mindrot.jbcrypt.BCrypt;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +30,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
@@ -40,24 +44,33 @@ class MemberServiceTest {
     Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
     String testId="testId";
     String testEmail="test@naver.com";
+    String testNickname="test";
+
 
     @Test
-    @DisplayName("회원가입 성공할때")
-    public void addMember() {
-        MemberDTO memberDTO=new MemberDTO(testEmail,testId,"20","test");
+    @DisplayName("회원가입 성공할때_컨트롤러에서 전달되는 memberDTO가 정상일 때")
+    void addMember_SUCCESS() {
+
+        MemberDTO memberDTO=new MemberDTO(testEmail,testId,"20",testNickname);
+        Member member=member();
+        MockedStatic<BCrypt> bCrypt= mockStatic(BCrypt.class);
 
         doNothing().when(memberMapper).save(any(Member.class));
+        when(BCrypt.hashpw("20",BCrypt.gensalt())).thenReturn("20");
+
         memberService.addMember(memberDTO);
 
         Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberDTO);
 
-        verify(memberMapper, times(1)).save(any(Member.class));
+        verify(memberMapper, times(1)).save(member);
         assertThat(violations.size()).isEqualTo(0);
+
+        bCrypt.close();
     }
 
     @Test
     @DisplayName("회원가입 실패할때_컨트롤러에서 전달되는 memberDTO가 정상이 아닐때")
-    public void addMember_FAILED(){
+    void addMember_FAILED(){
         MemberDTO memberDTO=new MemberDTO(testEmail,testId,"2","1");
 
         Set<ConstraintViolation<MemberDTO>> violations = validator.validate(memberDTO);
@@ -81,7 +94,7 @@ class MemberServiceTest {
 
         memberService.checkLoginId(testId);
 
-        verify(memberMapper,times(1)).findByLoginId(anyString());
+        verify(memberMapper,times(1)).findByLoginId(testId);
     }
 
     @Test
@@ -95,7 +108,7 @@ class MemberServiceTest {
 
         memberService.logIn(testId,member.getLoginPassword());
 
-        verify(sessionManager,times(1)).storeLoginId(anyLong());
+        verify(sessionManager,times(1)).storeLoginId(1L);
     }
 
     @Test
@@ -108,8 +121,8 @@ class MemberServiceTest {
         assertThatThrownBy(()->memberService.logIn(testId,member.getLoginPassword()))
                 .isInstanceOf(LoginException.class);
 
-        verify(memberMapper,times(1)).getMemberForLogIn(anyString());
-        verify(sessionManager,times(0)).storeLoginId(anyLong());
+        verify(memberMapper,times(1)).getMemberForLogIn(testId);
+        verify(sessionManager,times(0)).storeLoginId(1L);
     }
 
     private Member member(){
@@ -118,7 +131,7 @@ class MemberServiceTest {
                 .email(testEmail)
                 .loginId(testId)
                 .loginPassword("20")
-                .nickname("test")
+                .nickname(testNickname)
                 .grade(Grade.BASIC).build();
     }
 
@@ -128,7 +141,7 @@ class MemberServiceTest {
                 .email(testEmail)
                 .loginId(testId)
                 .loginPassword(BCrypt.hashpw("20",BCrypt.gensalt()))
-                .nickname("test")
+                .nickname(testNickname)
                 .grade(Grade.BASIC).build();
     }
 }
