@@ -1,13 +1,11 @@
 package study.movieservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import study.movieservice.controller.aop.annotation.RedissonLock;
 import study.movieservice.domain.movie.Recommend;
 import study.movieservice.repository.RecommendMapper;
 
-import static jodd.util.ThreadUtil.sleep;
 import static study.movieservice.domain.ExceptionMessageConst.*;
 
 @Service
@@ -25,21 +23,21 @@ public class RecommendService {
      *                       1일때 추천, 0일때 비추천을 나타내는 recommendState 정보보가담겨있는 Recommend 객체
      * @throws IllegalArgumentException 만약 reviewId, memberId가 일치하는 객체가 DB에 없을때 발생
      */
+    @RedissonLock(key="reviewId")
     public void recommendSave(Recommend inputRecommend) {
 
-        //Long memberId = sessionManager.getMemberId();
-        Long memberId=1L;
+        Long memberId = sessionManager.getMemberId();
         Long reviewId=inputRecommend.getReviewId();
 
-        //if (recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
-         //   throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
+        if (recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
+            throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
 
         Recommend recommend = Recommend.builder()
                 .memberId(memberId)
                 .reviewId(inputRecommend.getReviewId())
                 .recommendState(inputRecommend.getRecommendState())
                 .build();
-        sleep(1000);
+
         recommendMapper.recommendSave(recommend);
         reviewService.increaseLikeCount(reviewId);
     }
@@ -52,13 +50,14 @@ public class RecommendService {
      *                       1일때 추천, 0일때 비추천을 나타내는 recommendState 정보보가담겨있는 Recommend 객체
      * @throws IllegalArgumentException 만약 reviewId, memberId가 일치하는 객체가 DB에 없을때 발생
      */
+    @RedissonLock(key="reviewId")
     public void recommendUpdate(Recommend inputRecommend) {
 
         Long memberId = sessionManager.getMemberId();
         Long reviewId= inputRecommend.getReviewId();
 
-        //if (!recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
-        //    throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
+        if (!recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
+            throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
 
         if(inputRecommend.getRecommendState()) {
             reviewService.increaseLikeCount(reviewId);
@@ -78,7 +77,7 @@ public class RecommendService {
      *                       1일때 추천, 0일때 비추천을 나타내는 recommendState 정보보가담겨있는 Recommend 객체
      * @throws IllegalArgumentException 만약 reviewId, memberId가 일치하는 객체가 DB에 없을때 발생
      */
-
+    @RedissonLock(key="reviewId")
     public void recommendDelete(Recommend inputRecommend) {
 
         Long memberId = sessionManager.getMemberId();

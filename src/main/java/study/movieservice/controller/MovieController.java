@@ -7,7 +7,6 @@ import study.movieservice.controller.aop.annotation.LoginCheck;
 import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.movie.Recommend;
 import study.movieservice.domain.movie.Review;
-import study.movieservice.service.RecommendLock;
 import study.movieservice.service.RecommendService;
 import study.movieservice.service.ReviewService;
 
@@ -20,7 +19,7 @@ import static study.movieservice.domain.ExceptionMessageConst.*;
 public class MovieController {
 
     private final ReviewService reviewService;
-    private final RecommendLock recommendLock;
+    private final RecommendService recommendService;
 
     @PostMapping("/review")
     @ResponseStatus(HttpStatus.CREATED)
@@ -50,7 +49,7 @@ public class MovieController {
     @ResponseStatus(HttpStatus.OK)
     @LoginCheck
     public String recommendJoin(@RequestBody Recommend recommend) {
-        recommendLock.recommendSave(recommend);
+        recommendService.recommendSave(recommend);
         return SUCCESS_RECOMMEND_JOIN.getMessage();
     }
 
@@ -58,7 +57,7 @@ public class MovieController {
     @ResponseStatus(HttpStatus.OK)
     @LoginCheck
     public String recommendUpdate(@RequestBody Recommend recommend) {
-        recommendLock.recommendUpdate(recommend);
+        recommendService.recommendUpdate(recommend);
         return SUCCESS_RECOMMEND_UPDATE.getMessage();
     }
 
@@ -66,7 +65,7 @@ public class MovieController {
     @ResponseStatus(HttpStatus.OK)
     @LoginCheck
     public String recommendDelete(@RequestBody Recommend recommend) {
-        recommendLock.recommendDelete(recommend);
+        recommendService.recommendDelete(recommend);
         return SUCCESS_RECOMMEND_DELETE.getMessage();
     }
 }
