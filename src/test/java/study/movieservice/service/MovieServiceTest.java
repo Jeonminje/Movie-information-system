@@ -4,6 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,8 +16,6 @@ import study.movieservice.repository.MovieMapper;
 import study.movieservice.repository.PosterMapper;
 import study.movieservice.service.fileIO.FileIO;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -32,6 +32,8 @@ class MovieServiceTest {
     private FileIO fileIO;
     @InjectMocks
     private MovieService movieService;
+    @Captor
+    ArgumentCaptor<Poster> posterCaptor;
 
     @Test
     @DisplayName("영화 저장 하기")
@@ -51,46 +53,39 @@ class MovieServiceTest {
     @DisplayName("포스터 저장하기")
     void addPoster() throws IOException {
         //given
-        doNothing().when(posterMapper).savePoster(any(Poster.class));
-        MockMultipartFile mockMultipartFile = getMockMultipartFile();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "file.txt", "text/plain", "posterImg".getBytes());
+        Long movieId = 1L;
+        String filePath = "/path/to/file.txt";
+        Poster expectedPoster = Poster.builder().movieId(movieId).saveFilePath(filePath).build();
+
+        doReturn(filePath).when(fileIO).uploadFile(mockMultipartFile);
+        doNothing().when(posterMapper).savePoster(expectedPoster);
 
         //when
-        movieService.addPoster(mockMultipartFile, 3L);
+        movieService.addPoster(mockMultipartFile, movieId);
 
         //then
-        verify(posterMapper).savePoster(any(Poster.class));
+        verify(fileIO).uploadFile(mockMultipartFile);
+        verify(posterMapper).savePoster(posterCaptor.capture());
+
+        Poster actualPoster = posterCaptor.getValue();
+        Assertions.assertThat(expectedPoster).isEqualTo(actualPoster);
     }
 
     @Test
     @DisplayName("포스터 저장시 예외 처리")
     void exceptionPoster() throws IOException {
         //given
-        MockMultipartFile mockMultipartFile = getWrongMockMultipartFile();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("wrongFile", "wrongFile.txt", "text/plain", "posterImg".getBytes());
+        Long movieId = 1L;
+
         doThrow(new IOException()).when(fileIO).uploadFile(mockMultipartFile);
 
         //when
-        Assertions.assertThatThrownBy(() -> movieService.addPoster(mockMultipartFile, 3L)).isInstanceOf(IllegalArgumentException.class);
+        Assertions.assertThatThrownBy(() -> movieService.addPoster(mockMultipartFile, movieId)).isInstanceOf(IllegalArgumentException.class);
 
         //then
         verify(posterMapper, times(0)).savePoster(any(Poster.class));
-    }
-
-    private MockMultipartFile getMockMultipartFile() throws IOException {
-        String fileName = "testMoviePoster";
-        String contentType = "PNG";
-        String filePath="C:\\Users\\plus1802\\Desktop\\winter_project\\testInputImage\\앤트맨.PNG";
-
-        FileInputStream fileInputStream = new FileInputStream(new File(filePath));
-        return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
-    }
-
-    private MockMultipartFile getWrongMockMultipartFile() throws IOException {
-        String fileName = "wrongPoster";
-        String contentType = "PNG";
-        String filePath="C:\\Users\\plus1802\\Desktop\\winter_project\\testInputImage\\wrongImg.xx";
-
-        FileInputStream fileInputStream = new FileInputStream(new File(filePath));
-        return new MockMultipartFile(fileName, fileName + "." + contentType, contentType, fileInputStream);
     }
 
     private Movie getMovie(){
