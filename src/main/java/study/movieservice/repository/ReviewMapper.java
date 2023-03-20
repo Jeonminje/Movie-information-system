@@ -16,4 +16,9 @@ public interface ReviewMapper {
     List<RatingVO> getRatingList(Long movieId);
     Integer getRowCount(Long movieId);
     Double getRatingAverage(Long movieId);
+    void increaseLikeCount(Long reviewId);
+    void increaseDislikeCount(Long reviewId);
+    void decreaseLikeCount(Long reviewId);
+    void decreaseDislikeCount(Long reviewId);
+    Long getLikeCount(Long reviewId);
 }

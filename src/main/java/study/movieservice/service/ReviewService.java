@@ -32,6 +32,8 @@ public class ReviewService {
                 .movieId(reviewDto.getMovieId())
                 .memberId(memberId)
                 .content(reviewDto.getContent())
+                .likeCount(0L)
+                .disLikeCount(0L)
                 .rating(reviewDto.getRating()).build();
         reviewMapper.save(review);
     }
@@ -56,5 +58,22 @@ public class ReviewService {
                 .build();
 
         return result;
+    }
+    public void increaseLikeCount(Long reviewId){
+        reviewMapper.increaseLikeCount(reviewId);
+    }
+
+    public void increaseDislikeCount(Long reviewId){
+        reviewMapper.increaseDislikeCount(reviewId);
+    }
+
+    public void decreaseLikeCount(Long reviewId){
+        reviewMapper.decreaseLikeCount(reviewId);
+    }
+    public void decreaseDislikeCount(Long reviewId){
+        reviewMapper.decreaseDislikeCount(reviewId);
+    }
+    public Long getLikeCount(Long reviewId){
+        return reviewMapper.getLikeCount(reviewId);
     }
 }

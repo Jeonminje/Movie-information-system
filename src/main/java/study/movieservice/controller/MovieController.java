@@ -49,6 +49,7 @@ public class MovieController {
 
     @PostMapping("/recommend-reviews")
     @ResponseStatus(HttpStatus.OK)
+    @LoginCheck
     public String recommendJoin(@RequestBody Recommend recommend) {
         recommendService.recommendSave(recommend);
         return SUCCESS_RECOMMEND_JOIN.getMessage();
@@ -63,6 +64,7 @@ public class MovieController {
 
     @PatchMapping("/recommend-reviews")
     @ResponseStatus(HttpStatus.OK)
+    @LoginCheck
     public String recommendUpdate(@RequestBody Recommend recommend) {
         recommendService.recommendUpdate(recommend);
         return SUCCESS_RECOMMEND_UPDATE.getMessage();
@@ -70,6 +72,7 @@ public class MovieController {
 
     @DeleteMapping("/recommend-reviews")
     @ResponseStatus(HttpStatus.OK)
+    @LoginCheck
     public String recommendDelete(@RequestBody Recommend recommend) {
         recommendService.recommendDelete(recommend);
         return SUCCESS_RECOMMEND_DELETE.getMessage();
