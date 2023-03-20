@@ -4,7 +4,7 @@
 <mapper namespace="study.movieservice.repository.ReviewMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="reviewId">
         insert into review(movie_id, member_id, content, rating, like_count, dislike_count, updated_at, created_at)
-        values (#{movieId}, #{memberId}, #{content},#{rating}, #{likeCount}, 0, current_timestamp , current_timestamp)
+        values (#{movieId}, #{memberId}, #{content},#{rating}, #{likeCount}, #{disLikeCount}, current_timestamp , current_timestamp)
     </insert>
 
     <delete id="delete">
@@ -53,6 +53,26 @@
         select like_count
         from review
         where id=#{reviewId}
+    </select>
+
+    <select id="getRatingList" resultType="RatingVO">
+        select rating, count(rating)
+        from review
+        where movie_id = #{movieId}
+        group by rating
+        order by rating asc
+    </select>
+
+    <select id="getRowCount" resultType="INTEGER">
+        select count (*)
+        from review
+        where movie_id = #{movieId}
+    </select>
+
+    <select id="getRatingAverage" resultType="Double">
+        select avg (rating)
+        from review
+        where movie_id = #{movieId}
     </select>
 </mapper>
 

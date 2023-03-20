@@ -35,10 +35,13 @@ dependencies {
 	implementation 'org.json:json:20200518'
 	implementation 'org.projectlombok:lombok:1.18.22'
 
+	//유효성 검사를 위해 추가
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mockito:mockito-inline:3.6.0'
 }
 
 tasks.named('test') {

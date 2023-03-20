@@ -5,13 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import study.movieservice.controller.aop.annotation.LoginCheck;
 import study.movieservice.domain.PagingVO;
+import study.movieservice.domain.movie.MovieInfo;
 import study.movieservice.domain.movie.Recommend;
 import study.movieservice.domain.movie.Review;
+import study.movieservice.service.MovieService;
 import study.movieservice.service.RecommendService;
 import study.movieservice.service.ReviewService;
 
 import static study.movieservice.domain.ExceptionMessageConst.*;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class MovieController {
 
     private final ReviewService reviewService;
     private final RecommendService recommendService;
+    private final MovieService movieService;
 
     @PostMapping("/review")
     @ResponseStatus(HttpStatus.CREATED)
@@ -51,6 +53,13 @@ public class MovieController {
     public String recommendJoin(@RequestBody Recommend recommend) {
         recommendService.recommendSave(recommend);
         return SUCCESS_RECOMMEND_JOIN.getMessage();
+    }
+    @GetMapping("/info")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginCheck
+    public MovieInfo getMovieAndRating(@RequestParam Long movieId){
+
+        return movieService.getMovieAndRating(movieId);
     }
 
     @PatchMapping("/recommend-reviews")
