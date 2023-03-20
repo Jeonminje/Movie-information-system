@@ -4,8 +4,36 @@
 <mapper namespace="study.movieservice.repository.MovieMapper">
     <insert id="save" useGeneratedKeys="true" keyProperty="movieId">
         insert into movie(movie_name, genre, actor, running_time, supervisor, opening_date, updated_at, created_at)
-        values ( #{movieName}, #{genre}, #{actor}, #{runningTime}, #{supervisor}, #{openingDate}, current_timestamp , current_timestamp)
+        values (#{movieName}, #{genre}, #{actor}, #{runningTime},#{supervisor}, #{openingDate}, current_timestamp , current_timestamp)
     </insert>
+
+    <select id="getTotalRowCount" resultType="int">
+        select count (*)
+        from movie
+    </select>
+
+    <select id="getCurrentRowCount" resultType="int">
+        select count (*)
+        from movie
+        where opening_date between DATE_ADD (NOW(), interval -1 week) and NOW()
+    </select>
+
+    <select id="getAllMovieAndPosterList" resultType="MovieAndPosterVO">
+        select movie.id, movie.movie_name, movie.genre, movie.actor, movie.running_time, movie.supervisor, movie.opening_date, poster.save_file_path
+        from movie left join poster
+        on movie.id = poster.movie_id
+        order by movie.id Desc
+        limit #{startIdx}, #{moviePerPage}
+    </select>
+
+    <select id="getCurrentMovieAndPosterList" resultType="MovieAndPosterVO">
+        select movie.id, movie.movie_name, movie.genre, movie.actor, movie.running_time, movie.supervisor, movie.opening_date, poster.save_file_path
+        from movie left join poster
+        on movie.id = poster.movie_id
+        where movie.opening_date between DATE_ADD (NOW(), interval -1 week) and NOW()
+        order by movie.id Desc
+        limit #{startIdx}, #{moviePerPage}
+    </select>
 
     <select id="getMovie" resultType="Movie">
         select id, movie_name, genre, actor, running_time, supervisor, opening_date

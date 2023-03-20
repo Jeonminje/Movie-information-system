@@ -7,6 +7,8 @@ import study.movieservice.domain.member.MemberDTO;
 import study.movieservice.service.MailService;
 import study.movieservice.service.MemberService;
 
+import javax.validation.Valid;
+
 import static study.movieservice.domain.ExceptionMessageConst.*;
 
 
@@ -41,7 +43,7 @@ public class MemberController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.OK)
-    public String memberJoin(@RequestBody MemberDTO memberDTO) {
+    public String memberJoin(@RequestBody @Valid MemberDTO memberDTO) {
         memberService.addMember(memberDTO);
         return SUCCESS_SIGN_UP.getMessage();
     }
