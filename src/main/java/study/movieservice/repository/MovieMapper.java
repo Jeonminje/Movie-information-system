@@ -11,14 +11,9 @@ import java.util.List;
 public interface MovieMapper {
 
     void save(Movie movie);
-
-    int getTotalRowCount();
-
-    int getCurrentRowCount();
-
-    List<MovieAndPosterVO> getAllMovieAndPosterList(int startIdx,int moviePerPage);
-
-    List<MovieAndPosterVO> getCurrentMovieAndPosterList(int startIdx,int moviePerPage);
-    
     Movie getMovie(Long movieId);
+    int getTotalRowCount();
+    int getCurrentRowCount();
+    List<MovieAndPosterVO> getAllMovieAndPosterList(int startIdx,int moviePerPage);
+    List<MovieAndPosterVO> getCurrentMovieAndPosterList(int startIdx,int moviePerPage);
 }

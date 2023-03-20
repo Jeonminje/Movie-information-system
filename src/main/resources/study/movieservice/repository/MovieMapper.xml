@@ -7,6 +7,11 @@
         values (#{movieName}, #{genre}, #{actor}, #{runningTime},#{supervisor}, #{openingDate}, current_timestamp , current_timestamp)
     </insert>
 
+    <select id="getMovie" resultType="Movie">
+        select id, movie_name, genre, actor, running_time, supervisor, opening_date
+        from movie
+        where id = #{movieId}
+    </select>
 
     <select id="getTotalRowCount" resultType="int">
         select count (*)
@@ -17,12 +22,6 @@
         select count (*)
         from movie
         where opening_date between DATE_ADD (NOW(), interval -1 week) and NOW()
-    </select>
-
-    <select id="getMovie" resultType="Movie">
-        select id, movie_name, genre, actor, running_time, supervisor, opening_date
-        from movie
-        where id=#{movieId}
     </select>
 
     <select id="getAllMovieAndPosterList" resultType="MovieAndPosterVO">
