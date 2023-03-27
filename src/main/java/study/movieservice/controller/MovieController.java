@@ -42,9 +42,9 @@ public class MovieController {
     @GetMapping("/review")
     @ResponseStatus(HttpStatus.OK)
     @LoginCheck
-    public PagingVO getReviewList(@RequestParam(defaultValue = "1") Integer currentPageNum){
+    public PagingVO getReviewList(Long movieId, @RequestParam(defaultValue = "1") Integer currentPageNum){
 
-        return reviewService.getReviewList(currentPageNum);
+        return reviewService.getReviewList(movieId, currentPageNum);
     }
 
     @PostMapping("/recommend-reviews")
