@@ -77,4 +77,12 @@ public class MovieController {
         recommendService.recommendDelete(recommend);
         return SUCCESS_RECOMMEND_DELETE.getMessage();
     }
+
+    @PostMapping("/change-grade")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginCheck
+    public String changeGrade(){
+        reviewService.checkGrade();
+        return SUCCESS_CHANGE_GRADE.getMessage();
+    }
 }

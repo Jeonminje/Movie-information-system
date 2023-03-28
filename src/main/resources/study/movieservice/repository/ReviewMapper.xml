@@ -74,5 +74,11 @@
         from review
         where movie_id = #{movieId}
     </select>
+
+    <select id="getReviewCount" resultType="int">
+        SELECT COUNT(*)
+        FROM review
+        WHERE member_id = #{memberId}
+    </select>
 </mapper>
 
