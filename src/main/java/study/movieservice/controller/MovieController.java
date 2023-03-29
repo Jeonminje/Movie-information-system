@@ -78,7 +78,7 @@ public class MovieController {
         return SUCCESS_RECOMMEND_DELETE.getMessage();
     }
 
-    @PostMapping("/change-grade")
+    @PatchMapping("/grade")
     @ResponseStatus(HttpStatus.OK)
     @LoginCheck
     public String changeGrade(){

@@ -2,6 +2,7 @@ package study.movieservice.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.SessionConst;
 import study.movieservice.domain.member.Grade;
@@ -82,9 +83,11 @@ public class ReviewService {
     public Long getLikeCount(Long reviewId){
         return reviewMapper.getLikeCount(reviewId);
     }
-    public void checkGrade(){
-        Long memberId = (Long) httpSession.getAttribute(SessionConst.MEMBER_ID);
 
+    @Transactional
+    public void checkGrade(){
+
+        Long memberId = (Long) httpSession.getAttribute(SessionConst.MEMBER_ID);
         int reviewCount=reviewMapper.getReviewCount(memberId);
 
         if(reviewCount>5)
