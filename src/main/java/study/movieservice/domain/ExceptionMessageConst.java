@@ -42,7 +42,9 @@ public enum ExceptionMessageConst {
 
     SUCCESS_SAVE_MOVIE("영화등록이 완료되었습니다."),
     ILLEGAL_MOVIE_ID("영화가 존재하지 않습니다."),
-    FAILED_GET_LOCK("현재 사용량이 많아 대기시간이 만료되었습니다.");
+    FAILED_GET_LOCK("현재 사용량이 많아 대기시간이 만료되었습니다."),
+
+    SUCCESS_CHANGE_GRADE("등급 변경이 완료되었습니다.");
 
 
     private final String message;

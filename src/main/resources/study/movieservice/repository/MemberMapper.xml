@@ -20,5 +20,12 @@
         from member
         where login_id = #{loginId}
     </select>
+
+    <update id="changeGrade" >
+        update member
+        set grade=#{grade}
+        where member.id = #{memberId}
+    </update>
+
 </mapper>
 

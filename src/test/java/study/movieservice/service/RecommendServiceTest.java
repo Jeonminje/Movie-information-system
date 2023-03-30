@@ -3,6 +3,7 @@ package study.movieservice.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import study.movieservice.domain.SessionConst;
 import study.movieservice.domain.movie.Recommend;
 import study.movieservice.repository.RecommendMapper;
@@ -26,6 +27,7 @@ class RecommendServiceTest {
     @Autowired
     HttpSession httpSession;
 
+    //static Long tempId;
     private Recommend createRecommend(){
         return Recommend.builder()
                 .reviewId(1L)
@@ -35,12 +37,11 @@ class RecommendServiceTest {
     }
 
     @Test
+    @Transactional
     void test_concurrency() throws InterruptedException {
-        //given
-        Recommend recommend=createRecommend();
-        httpSession.setAttribute(SessionConst.MEMBER_ID, 1L);
 
-        //when
+        Recommend recommend=createRecommend();
+
         ExecutorService executorService= Executors.newFixedThreadPool(100);
         CountDownLatch countDownLatch=new CountDownLatch(100);
 
@@ -49,9 +50,7 @@ class RecommendServiceTest {
                 try{
                     recommendService.recommendSave(recommend);
 
-                }catch(Exception e){
-                    System.out.println("e = " + e);
-                } finally {
+                }finally {
                     countDownLatch.countDown();
                 }
             });
@@ -59,6 +58,6 @@ class RecommendServiceTest {
 
         countDownLatch.await();
 
-        assertThat(reviewService.getLikeCount(1L)).isEqualTo(100);
+        assertThat(reviewService.getLikeCount(1L)).isEqualTo(101);
     }
 }

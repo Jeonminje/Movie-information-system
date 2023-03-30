@@ -2,14 +2,19 @@ package study.movieservice.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.SessionConst;
+import study.movieservice.domain.member.Grade;
 import study.movieservice.domain.movie.Review;
 import study.movieservice.domain.movie.ReviewVO;
+import study.movieservice.repository.MemberMapper;
 import study.movieservice.repository.ReviewMapper;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+
+import static study.movieservice.domain.movie.MovieListType.ALL;
 
 @Service
 public class ReviewService {
@@ -17,12 +22,14 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final HttpSession httpSession;
     private final Integer reviewPerPage;
+    private final MemberMapper memberMapper;
 
     public ReviewService(ReviewMapper reviewMapper, HttpSession httpSession,
-                        @Value("${reviewPerPage}") Integer reviewPerPage) {
+                         @Value("${reviewPerPage}") Integer reviewPerPage, MemberMapper memberMapper) {
         this.reviewMapper = reviewMapper;
         this.httpSession = httpSession;
         this.reviewPerPage = reviewPerPage;
+        this.memberMapper = memberMapper;
     }
 
     public void saveReview(Review reviewDto) {
@@ -75,5 +82,17 @@ public class ReviewService {
     }
     public Long getLikeCount(Long reviewId){
         return reviewMapper.getLikeCount(reviewId);
+    }
+
+    @Transactional
+    public void checkGrade(){
+
+        Long memberId = (Long) httpSession.getAttribute(SessionConst.MEMBER_ID);
+        int reviewCount=reviewMapper.getReviewCount(memberId);
+
+        if(reviewCount>5)
+            memberMapper.changeGrade(memberId, Grade.VIP);
+        else
+            memberMapper.changeGrade(memberId,Grade.BASIC);
     }
 }

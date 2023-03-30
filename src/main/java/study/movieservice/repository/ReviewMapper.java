@@ -21,4 +21,5 @@ public interface ReviewMapper {
     void decreaseLikeCount(Long reviewId);
     void decreaseDislikeCount(Long reviewId);
     Long getLikeCount(Long reviewId);
+    int getReviewCount(Long memberId);
 }
