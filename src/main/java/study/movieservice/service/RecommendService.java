@@ -85,6 +85,14 @@ public class RecommendService {
 
         if (!recommendMapper.findByReviewIdAndMemberId(reviewId, memberId))
             throw new IllegalArgumentException(FAILED_RECOMMEND_REQUEST.getMessage());
+
+        if(inputRecommend.getRecommendState()) {
+            reviewService.decreaseLikeCount(reviewId);
+        }
+        else{
+            reviewService.decreaseDislikeCount(reviewId);
+        }
+
         recommendMapper.recommendDelete(memberId, reviewId);
     }
 }
