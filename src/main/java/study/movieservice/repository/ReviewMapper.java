@@ -12,7 +12,7 @@ public interface ReviewMapper {
     void save(Review review);
     void delete(Long reviewId);
     int getTotalRowCount();
-    List<ReviewVO> getReviewList(int startIdx);
+    List<ReviewVO> getReviewList(Long movieId, int startIdx);
     List<RatingVO> getRatingList(Long movieId);
     Integer getRowCount(Long movieId);
     Double getRatingAverage(Long movieId);
