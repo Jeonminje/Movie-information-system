@@ -6,6 +6,9 @@ import lombok.Builder;
 
 import java.util.Objects;
 
+/**
+ * 멤버 객체 저장을 위한 클래스
+ */
 @Builder
 @Getter
 @EqualsAndHashCode
@@ -17,23 +20,19 @@ public class Member {
     private final String nickname;
     private final Grade grade;
 
-    @Builder
-    public Member(Long memberId, String email, String loginId, String loginPassword, String nickname, Grade grade) {
-        this.memberId = memberId;
-        this.email = email;
-        this.loginId = loginId;
-        this.loginPassword = loginPassword;
-        this.nickname = nickname;
-        this.grade = grade;
-    }
-
+    /**
+     * member 객체의 모든 element 값들이 같다면 equals를 만족하도록 재정의
+     *
+     * @param object 비교를 위한 Object 객체
+     * @return member 객체의 각 요소들이 모두같으면 1 아니면 0
+     */
     @Override
-    public boolean equals(Object o){
-        if(this==o)
+    public boolean equals(Object object){
+        if(this==object)
             return true;
-        if(!(o instanceof Member))
+        if(!(object instanceof Member))
             return false;
-        Member member=(Member) o;
+        Member member=(Member) object;
 
         return member.email.equals(email)
                 && member.loginId.equals(loginId)
@@ -41,6 +40,12 @@ public class Member {
                 && member.nickname.equals(nickname)
                 && member.grade.equals(grade);
     }
+
+    /**
+     * member 객체의 모든 element 값들이 같다면 같은 hashcode값을 리턴하도록 재정의
+     *
+     * @return hashcode값
+     */
     @Override
     public int hashCode(){
         return Objects.hash(email,loginId,loginPassword,nickname,grade);

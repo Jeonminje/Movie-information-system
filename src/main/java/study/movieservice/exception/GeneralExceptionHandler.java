@@ -15,6 +15,9 @@ import javax.security.auth.login.LoginException;
 import javax.validation.ConstraintViolationException;
 import java.sql.SQLException;
 
+/**
+ * 발생하는 exception들을 캐치하여 핸들링
+ */
 @Slf4j
 @RestControllerAdvice
 public class GeneralExceptionHandler {
