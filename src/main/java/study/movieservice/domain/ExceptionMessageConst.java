@@ -3,6 +3,9 @@ package study.movieservice.domain;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * ExceptionMessage를 가지고 있는 enum
+ */
 @Getter
 @RequiredArgsConstructor
 public enum ExceptionMessageConst {

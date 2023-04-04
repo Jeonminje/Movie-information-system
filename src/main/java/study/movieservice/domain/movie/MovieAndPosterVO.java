@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import java.util.Date;
 
+/**
+ * DB로 부터 영화정보 및 포스터 정보를 담아오는 VO
+ */
 @Getter
 @RequiredArgsConstructor
 public class MovieAndPosterVO {

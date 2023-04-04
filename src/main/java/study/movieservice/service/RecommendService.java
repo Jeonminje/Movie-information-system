@@ -8,6 +8,9 @@ import study.movieservice.repository.RecommendMapper;
 
 import static study.movieservice.domain.ExceptionMessageConst.*;
 
+/**
+ * 댓글 추천 관련 로직 클래스
+ */
 @Service
 @RequiredArgsConstructor
 public class RecommendService {
