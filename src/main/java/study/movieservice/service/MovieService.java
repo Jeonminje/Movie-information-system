@@ -26,6 +26,9 @@ import java.util.List;
 import static study.movieservice.domain.ExceptionMessageConst.*;
 import static study.movieservice.domain.movie.MovieListType.*;
 
+/**
+ * movie, poster와 관련된 비지니스 로직을 처리하는 클래스
+ */
 @Service
 public class MovieService {
 
@@ -110,7 +113,14 @@ public class MovieService {
 
         return result;
     }
-    
+
+    /**
+     * movieId를 입력받아 해당 영화의 정보와 리뷰들의 평점을 계산하여 리턴하는 메소드
+     *
+     * @param movieId 정보를 받고자하는 영화의 id
+     * @return movie객체의 정보와 리뷰들의 평점들의 평균
+     * @throws IllegalArgumentException 만약 movieId에 해당하는 영화객체가 없을경우 발생
+     */
     public MovieInfo getMovieAndRating(Long movieId){
 
         Optional<Movie> movieOptional = Optional.ofNullable(movieMapper.getMovie(movieId));

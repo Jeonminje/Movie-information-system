@@ -5,6 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.*;
 
+/**
+ * input으로 받은 memberDTO
+ * 각 element들의 유효성 검사를 진행
+ * 
+ */
 @Getter
 @RequiredArgsConstructor
 public class MemberDTO {
