@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static study.movieservice.domain.ExceptionMessageConst.*;
-import static study.movieservice.domain.movie.MovieListType.ALL;
+import static study.movieservice.domain.movie.MovieListType.*;
 
 /**
- * 영화 관련 로직 클래스
+ * movie, poster와 관련된 비지니스 로직을 처리하는 클래스
  */
 @Service
 public class MovieService {
@@ -111,9 +111,11 @@ public class MovieService {
     }
 
     /**
-     * 영화 정보 및 해당 영화 평점정보를 가져오는 함수
-     * @param movieId 특정 영화를 가리키는 값
-     * @return 영화, 평균평점, 평점 수, 평점 분포를 지니는 객체 반환
+     * movieId를 입력받아 해당 영화의 정보와 리뷰들의 평점을 계산하여 리턴하는 메소드
+     *
+     * @param movieId 정보를 받고자하는 영화의 id
+     * @return movie객체의 정보와 리뷰들의 평점들의 평균
+     * @throws IllegalArgumentException 만약 movieId에 해당하는 영화객체가 없을경우 발생
      */
     public MovieInfo getMovieAndRating(Long movieId){
 
