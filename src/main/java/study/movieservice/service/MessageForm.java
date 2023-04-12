@@ -1,5 +1,8 @@
 package study.movieservice.service;
 
+/**
+ * 메시지 양식 관리 클래스
+ */
 public final class MessageForm {
 
     private MessageForm(){

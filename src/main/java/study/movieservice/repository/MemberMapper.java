@@ -6,7 +6,9 @@ import study.movieservice.domain.member.Member;
 
 import java.util.Optional;
 
-
+/**
+ * member 테이블에 접근하는 매퍼.
+ */
 @Mapper
 public interface MemberMapper {
     void save(Member member);

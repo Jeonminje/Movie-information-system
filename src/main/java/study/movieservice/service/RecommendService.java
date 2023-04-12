@@ -9,7 +9,7 @@ import study.movieservice.repository.RecommendMapper;
 import static study.movieservice.domain.ExceptionMessageConst.*;
 
 /**
- * recommend와 관련된 비지니스 로직을 처리하는 클래스
+ * 댓글 추천 관련 로직 클래스
  */
 @Service
 @RequiredArgsConstructor
