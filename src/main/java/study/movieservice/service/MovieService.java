@@ -1,39 +1,38 @@
 package study.movieservice.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import study.movieservice.domain.PagingVO;
 import study.movieservice.domain.movie.*;
-import study.movieservice.domain.movie.Movie;
-import study.movieservice.domain.movie.MovieInfo;
-import study.movieservice.domain.movie.RatingVO;
-import study.movieservice.domain.movie.Poster;
 import study.movieservice.repository.MovieMapper;
-import study.movieservice.repository.ReviewMapper;
-
-import java.util.List;
-import java.util.Optional;
-
-import static study.movieservice.domain.ExceptionMessageConst.ILLEGAL_MOVIE_ID;
 import study.movieservice.repository.PosterMapper;
+import study.movieservice.repository.ReviewMapper;
 import study.movieservice.service.fileIO.FileIO;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static study.movieservice.domain.ExceptionMessageConst.*;
 import static study.movieservice.domain.movie.MovieListType.*;
 
+/**
+ * movie, poster와 관련된 비지니스 로직을 처리하는 클래스
+ */
 @Service
 public class MovieService {
-
+    /**
+     * spring bean 자동 주입 필드
+     */
     private final MovieMapper movieMapper;
     private final PosterMapper posterMapper;
     private final FileIO fileIO;
-    private final Integer moviePerPage;
     private final ReviewMapper reviewMapper;
+    /**
+     * 페이지 별 영화 개수
+     */
+    private final Integer moviePerPage;
 
     public MovieService(MovieMapper movieMapper, PosterMapper posterMapper, FileIO fileIO, @Value("${moviePerPage}") Integer moviePerPage, ReviewMapper reviewMapper) {
         this.movieMapper = movieMapper;
@@ -110,7 +109,14 @@ public class MovieService {
 
         return result;
     }
-    
+
+    /**
+     * movieId를 입력받아 해당 영화의 정보와 리뷰들의 평점을 계산하여 리턴하는 메소드
+     *
+     * @param movieId 정보를 받고자하는 영화의 id
+     * @return movie객체의 정보와 리뷰들의 평점들의 평균
+     * @throws IllegalArgumentException 만약 movieId에 해당하는 영화객체가 없을경우 발생
+     */
     public MovieInfo getMovieAndRating(Long movieId){
 
         Optional<Movie> movieOptional = Optional.ofNullable(movieMapper.getMovie(movieId));

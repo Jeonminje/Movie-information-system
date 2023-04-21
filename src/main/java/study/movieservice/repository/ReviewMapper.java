@@ -7,12 +7,15 @@ import study.movieservice.domain.movie.ReviewVO;
 
 import java.util.List;
 
+/**
+ * review 테이블에 접근하는 매퍼.
+ */
 @Mapper
 public interface ReviewMapper {
     void save(Review review);
     void delete(Long reviewId);
     int getTotalRowCount();
-    List<ReviewVO> getReviewList(int startIdx);
+    List<ReviewVO> getReviewList(Long movieId, int startIdx);
     List<RatingVO> getRatingList(Long movieId);
     Integer getRowCount(Long movieId);
     Double getRatingAverage(Long movieId);

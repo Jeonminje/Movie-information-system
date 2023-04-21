@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+/**
+ * 포스터 정보를 담는 DTO
+ */
 @Getter
 @Builder
 @EqualsAndHashCode

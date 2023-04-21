@@ -13,10 +13,16 @@ import javax.servlet.http.HttpSession;
 
 import static java.util.Objects.isNull;
 
+/**
+ * 로그인 체크를 위한 aop.
+ */
 @Component
 @Aspect
 public class LoginCheckAop {
-
+    /**
+     * 세션 및 memberId 유무 확인
+     * @throws LoginException 세션 또는 memberId가 존재하지 않습니다.
+     */
     @Before("@annotation(study.movieservice.controller.aop.annotation.LoginCheck)")
     public void loginCheck() throws LoginException {
         HttpSession httpSession = ((ServletRequestAttributes)(RequestContextHolder.currentRequestAttributes())).getRequest().getSession(false);

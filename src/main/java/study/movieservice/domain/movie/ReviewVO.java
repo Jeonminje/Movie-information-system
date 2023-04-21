@@ -3,6 +3,9 @@ package study.movieservice.domain.movie;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * 리뷰 목록 반환 시 사용하는 리뷰 VO
+ */
 @Getter
 @RequiredArgsConstructor
 public class ReviewVO {

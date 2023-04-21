@@ -14,10 +14,15 @@ import java.lang.reflect.Method;
 
 import static study.movieservice.domain.ExceptionMessageConst.FAILED_GET_LOCK;
 
+/**
+ * RedissonLock 적용을 위한 어노테이션
+ * 분산락을 담당
+ */
 @Component
 @Aspect
 @RequiredArgsConstructor
 public class RedissonLockAop {
+
     private final RedissonClient redissonClient;
 
     @Around("@annotation(study.movieservice.controller.aop.annotation.RedissonLock)")
@@ -48,6 +53,14 @@ public class RedissonLockAop {
 
     }
 
+    /**
+     * redisson 클라이언트에 저장할 key값을 생성하는 메소드
+     *
+     * @param parameterNames 호출되는 메소드의 파라미터 이름목록
+     * @param args joinPoint가 호출되는 객체의 파라미터 목록
+     * @param key 메소드별로 지정해놓은 default key값
+     * @return redisson 클라이언트에 저장할 key값
+     */
     private String createKey(String[] parameterNames, Object[] args, String key) {
         String resultKey = key;
 

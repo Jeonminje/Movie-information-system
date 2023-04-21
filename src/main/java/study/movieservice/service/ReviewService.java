@@ -50,12 +50,12 @@ public class ReviewService {
         reviewMapper.delete(reviewId);
     }
 
-    public PagingVO getReviewList(Integer currentPageNum){
+    public PagingVO getReviewList(Long movieId, Integer currentPageNum){
 
         int total = reviewMapper.getTotalRowCount();
         int totalPageNum = (int) Math.ceil((double) total/reviewPerPage);
         int startIdx = (currentPageNum - 1) * reviewPerPage;
-        List<ReviewVO> data = reviewMapper.getReviewList(startIdx);
+        List<ReviewVO> data = reviewMapper.getReviewList(movieId, startIdx);
 
         PagingVO result = PagingVO.builder()
                 .total(total)
