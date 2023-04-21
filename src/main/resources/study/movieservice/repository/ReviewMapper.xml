@@ -7,10 +7,11 @@
         values (#{movieId}, #{memberId}, #{content},#{rating}, #{likeCount}, #{disLikeCount}, current_timestamp , current_timestamp)
     </insert>
 
-    <delete id="delete">
-        delete from review
+    <update id="delete">
+        update review
+        set deleted=1
         where id = #{reviewId}
-    </delete>
+    </update>
 
     <select id="getTotalRowCount" resultType="int">
         select count (*)
@@ -21,7 +22,7 @@
         select r.id as reviewId, movie_id, login_id, r.member_id as member_id, nickname, content, rating, like_count, dislike_count
         from review as r left join member as m
         on r.member_id = m.id
-        where movie_id = #{movieId}
+        and r.deleted=0
         order by reviewId Desc
         limit #{startIdx}, 10
     </select>
@@ -60,6 +61,7 @@
         select rating, count(rating)
         from review
         where movie_id = #{movieId}
+            and deleted=0
         group by rating
         order by rating asc
     </select>
@@ -68,18 +70,21 @@
         select count (*)
         from review
         where movie_id = #{movieId}
+            and deleted=0
     </select>
 
     <select id="getRatingAverage" resultType="Double">
         select avg (rating)
         from review
         where movie_id = #{movieId}
+            and deleted=0
     </select>
 
     <select id="getReviewCount" resultType="int">
         SELECT COUNT(*)
         FROM review
         WHERE member_id = #{memberId}
+            and deleted=0
     </select>
 </mapper>
 

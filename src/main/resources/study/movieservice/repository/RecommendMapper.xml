@@ -13,6 +13,7 @@
             from recommend
             where member_id = #{memberId}
             and review_id = #{reviewId}
+            and deleted=0
         )
     </select>
 
@@ -23,12 +24,11 @@
           and review_id = #{recommend.reviewId}
     </update>
 
-    <delete id="recommendDelete">
-        delete
-        from recommend
+    <update id="recommendDelete">
+        update recommend
+        set deleted=1
         where member_id = #{memberId}
           and review_id = #{reviewId}
-    </delete>
+    </update>
 
 </mapper>
-
