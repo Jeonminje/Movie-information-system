@@ -32,6 +32,8 @@ dependencies {
 	implementation 'org.redisson:redisson-spring-boot-starter:3.18.0'
 	//using aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	// S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
 	implementation 'org.json:json:20200518'
 	implementation 'org.projectlombok:lombok:1.18.22'
 

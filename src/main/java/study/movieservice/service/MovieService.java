@@ -1,5 +1,6 @@
 package study.movieservice.service;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,7 +35,7 @@ public class MovieService {
      */
     private final Integer moviePerPage;
 
-    public MovieService(MovieMapper movieMapper, PosterMapper posterMapper, FileIO fileIO, @Value("${moviePerPage}") Integer moviePerPage, ReviewMapper reviewMapper) {
+    public MovieService(MovieMapper movieMapper, PosterMapper posterMapper, @Qualifier("fileIOS3") FileIO fileIO, @Value("${moviePerPage}") Integer moviePerPage, ReviewMapper reviewMapper) {
         this.movieMapper = movieMapper;
         this.posterMapper = posterMapper;
         this.fileIO = fileIO;
