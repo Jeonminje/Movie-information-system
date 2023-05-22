@@ -52,6 +52,7 @@ public class FileIOS3 implements FileIO {
     private ByteArrayInputStream getByteArrayInputStream(MultipartFile file, ObjectMetadata objectMetadata) throws IOException {
 
         byte[] bytes = IOUtils.toByteArray(file.getInputStream());
+        file.getInputStream().close();
         objectMetadata.setContentLength(bytes.length);
 
         return new ByteArrayInputStream(bytes);
